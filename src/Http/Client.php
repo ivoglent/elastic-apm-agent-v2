@@ -9,7 +9,7 @@
 namespace Elastic\Apm\PhpAgent\Http;
 
 
-class Client
+class Client extends \GuzzleHttp\Client
 {
 
 }
