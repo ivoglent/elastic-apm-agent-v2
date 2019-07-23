@@ -6,6 +6,7 @@ use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Model\Agent as AgentConfig;
 use Elastic\Apm\PhpAgent\Model\Framework;
 use Elastic\Apm\PhpAgent\Model\User;
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
 class Config implements ConfigInterface
@@ -69,7 +70,11 @@ class Config implements ConfigInterface
         if (null !== $secret_token) {
             $this->secret_token = $secret_token;
         }
-        $this->client = $client;
+        if (null !== $client) {
+            $this->client = $client;
+        } else {
+            $this->client = new Client();
+        }
         if (null !== $server_url) {
             $this->server_url = $server_url;
         }

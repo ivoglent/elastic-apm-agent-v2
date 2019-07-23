@@ -35,6 +35,31 @@ class Agent extends BaseObject
     private $ephemeral_id;
 
     /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion(string $version): void
+    {
+        $this->version = $version;
+    }
+
+    /**
+     * @param string $ephemeral_id
+     */
+    public function setEphemeralId(string $ephemeral_id): void
+    {
+        $this->ephemeral_id = $ephemeral_id;
+    }
+
+
+    /**
      * @return string
      */
     public function getName(): string

@@ -2,7 +2,7 @@
 namespace Elastic\Apm\PhpAgent\Exception;
 
 
-class InvalidConfigException
+class InvalidConfigException extends \Exception
 {
 
 }

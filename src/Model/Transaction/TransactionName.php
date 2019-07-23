@@ -1,5 +1,5 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model\Type;
+namespace Elastic\Apm\PhpAgent\Model\Transaction;
 
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
@@ -11,7 +11,7 @@ class TransactionName extends BaseObject
      *
      * @var string
      */
-    private $name;
+    public $name;
 
     /**
      * @return array

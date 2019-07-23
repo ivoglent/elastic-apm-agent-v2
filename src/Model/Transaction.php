@@ -10,58 +10,112 @@ namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Model\Context\Context;
 use Elastic\Apm\PhpAgent\Model\Transaction\SpanCount;
-use Elastic\Apm\PhpAgent\Model\Type\TransactionName;
-use Elastic\Apm\PhpAgent\Model\Type\TransactionType;
+use Elastic\Apm\PhpAgent\Model\Transaction\TransactionName;
+use Elastic\Apm\PhpAgent\Model\Transaction\TransactionType;
 
 class Transaction extends AbstractModel
 {
     /**
+     * @var Span[]
+     */
+    protected $spans = [];
+
+    /**
      * @var TransactionName
      */
-    private $name;
+    public $name;
 
     /**
      * @var TransactionType
      */
-    private $type;
+    public $type;
 
     /**
      * @var SpanCount
      */
-    private $span_count;
+    protected $span_count;
 
     /**
      * @var Context
      */
-    private $context;
+    protected $context;
 
     /**
      * How long the transaction took to complete, in ms with 3 decimal points
      *
      * @var float
      */
-    private $duration;
+    public $duration;
 
     /**
      * The result of the transaction. For HTTP-related transactions, this should be the status code formatted like 'HTTP 2xx'
      *
      * @var string
      */
-    private $result;
+    protected $result;
 
     /**
      * A mark captures the timing of a significant event during the lifetime of a transaction. Marks are organized into groups and can be set by the user or the agent.
      *
      * @var object
      */
-    private $marks;
+    protected $marks;
 
     /**
      * Transactions that are 'sampled' will include all available information. Transactions that are not sampled will not have 'spans' or 'context'. Defaults to true.
      *
      * @var bool
      */
-    private $sampled;
+    protected $sampled;
+
+    public function __construct(?array $config = [])
+    {
+        $this->type = new TransactionType($config);
+        $this->name = new TransactionName($config);
+        if (!empty($config['id'])) {
+            $this->id = $config['id'];
+        } else {
+            $this->id = $this->generateId(16);
+        }
+
+        if (!empty($config['trace_id'])) {
+            $this->trace_id = $config['trace_id'];
+        } else {
+            $this->trace_id = $this->generateId(16);
+        }
+        if (null === $this->span_count) {
+            $this->span_count = new SpanCount(['started' => 0, 'dropped' => 0]);
+        }
+        parent::__construct([]);
+    }
+
+    /**
+     * @return SpanCount
+     */
+    public function getSpanCount(): SpanCount
+    {
+        return $this->span_count;
+    }
+
+    /**
+     * @param SpanCount $span_count
+     */
+    public function setSpanCount(SpanCount $span_count): void
+    {
+        $this->span_count = $span_count;
+    }
+
+    /**
+     * @param Span $span
+     */
+    public function setSpan(Span $span) {
+        $span->setTransactionId($this->id);
+        $span->setTraceId($this->trace_id);
+        $span->setParentId($this->id);
+        $this->spans[] = $span;
+        $this->span_count->setStarted(count($this->spans));
+    }
+
 
     /**
      * @return array
@@ -95,8 +149,7 @@ class Transaction extends AbstractModel
             'required' => ['id', 'trace_id', 'span_count', 'duration', 'type', 'name'],
             'types' => [
                 'duration' => 'float',
-                'sampled' => 'boolean',
-                'span_count' => 'integer'
+                'sampled' => 'boolean'
             ]
         ];
     }

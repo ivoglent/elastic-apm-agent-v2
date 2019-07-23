@@ -34,6 +34,40 @@ class SpanCount extends BaseObject
     }
 
     /**
+     * @return int
+     */
+    public function getStarted(): int
+    {
+        return $this->started;
+    }
+
+    /**
+     * @param int $started
+     */
+    public function setStarted(int $started): void
+    {
+        $this->started = $started;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDropped(): int
+    {
+        return $this->dropped;
+    }
+
+    /**
+     * @param int $dropped
+     */
+    public function setDropped(int $dropped): void
+    {
+        $this->dropped = $dropped;
+    }
+
+
+
+    /**
      * Define object validation rules
      *
      * @return array

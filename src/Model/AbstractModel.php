@@ -14,6 +14,10 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     protected $timer;
 
     /**
+     * @var integer
+     */
+    protected $duration;
+    /**
      * Hex encoded 128 random bits ID of the trace
      *
      * @var  string
@@ -67,6 +71,7 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
      */
     public function stop(): void {
         $this->timer->stop();
+        $this->duration = $this->timer->getElapsedTime();
     }
 
     /**

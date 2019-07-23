@@ -2,7 +2,7 @@
 namespace Elastic\Apm\PhpAgent\Exception;
 
 
-class RuntimeException
+class RuntimeException extends \Exception
 {
 
 }

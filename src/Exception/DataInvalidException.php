@@ -10,6 +10,6 @@ class DataInvalidException extends \Exception
     public function __construct($fields, $message = "", $code = 0, Throwable $previous = null)
     {
         $this->fields = $fields;
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message . ' : ' . implode(', ', $fields) , $code, $previous);
     }
 }

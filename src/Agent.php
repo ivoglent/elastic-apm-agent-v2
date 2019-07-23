@@ -6,6 +6,7 @@ use Elastic\Apm\PhpAgent\Interfaces\AgentInterface;
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
+use Elastic\Apm\PhpAgent\Model\Transaction;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -41,16 +42,24 @@ class Agent implements AgentInterface
      */
     public function startTransaction(string $name, string $type, ?string $id = null)
     {
-
+        $transaction = new Transaction([
+           'name' => $name,
+           'type' => $type,
+           'id' => $id
+        ]);
+        $transaction->start();
+        $this->dataCollector->setTransaction($transaction);
     }
 
     /**
      * Stop current transaction
      * @throws RuntimeException if transaction did not started yet.
+     * @throws Exception\RuntimeException
      */
     public function stopTransaction(): void
     {
-        // TODO: Implement stopTransaction() method.
+        $this->dataCollector->getTransaction()->stop();
+        $this->send();
     }
 
     /**
@@ -59,10 +68,19 @@ class Agent implements AgentInterface
      * @param string $name Name of trace span
      * @param string $type Type of trace span
      * @return Span
+     * @throws Exception\RuntimeException
      */
     public function startTrace(string $name, string $type): Span
     {
-        // TODO: Implement startTrace() method.
+        $span = new Span([
+            'name' => $name,
+            'type' => $type
+        ]);
+        //Set transaction / trace
+        $span->start();
+
+        $this->dataCollector->register($span);
+        return  $span;
     }
 
     /**
@@ -112,13 +130,11 @@ class Agent implements AgentInterface
      * Send all information to APM server
      *
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(): bool
     {
         $client = $this->config->getClient();
-        if (empty($client)) {
-            $client = new Client();
-        }
         try {
             $request = $this->makeRequest();
             /** @var ResponseInterface $response */
@@ -126,6 +142,7 @@ class Agent implements AgentInterface
             return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
         } catch (\Exception $e) {
             //Silent
+            print_r($e);
         }
         return false;
     }

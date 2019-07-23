@@ -1,5 +1,5 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model\Type;
+namespace Elastic\Apm\PhpAgent\Model\Transaction;
 
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
@@ -12,6 +12,23 @@ class TransactionType extends BaseObject
      * @var string
      */
     private $type;
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
 
     /**
      * @return array
