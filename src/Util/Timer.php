@@ -1,5 +1,4 @@
 <?php
-
 namespace Elastic\Apm\PhpAgent\Util;
 
 

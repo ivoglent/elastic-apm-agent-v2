@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/22/19
- * Time: 6:35 PM
- */
-
 namespace Elastic\Apm\PhpAgent\Model;
 
 
-use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
+use Elastic\Apm\PhpAgent\Util\BaseObject;
 
-class Stacktrace implements ModelInterface
+class Stacktrace extends BaseObject
 {
     /**
      * Basename of tracing file
@@ -96,33 +89,94 @@ class Stacktrace implements ModelInterface
     private $context_line;
 
     /**
-     * Stacktrace constructor.
-     * @param string $filename
-     * @param int $lineno
-     * @param string $function
-     * @param string $abs_path
-     * @param int $colno
-     * @param bool|null|string $library_frame
-     * @param string $module
-     * @param string $post_context
-     * @param string $pre_context
-     * @param array|null|object $vars
-     * @param bool|null|string $context_line
+     * @return string
      */
-    public function __construct(string $filename, int $lineno, string $function, string $abs_path, int $colno, ?string $library_frame, ?string $module, ?string $post_context, ?string $pre_context, ?array $vars, ?bool $context_line)
+    public function getFilename(): string
     {
-        $this->filename = $filename;
-        $this->lineno = $lineno;
-        $this->function = $function;
-        $this->abs_path = $abs_path;
-        $this->colno = $colno;
-        $this->library_frame = $library_frame;
-        $this->module = $module;
-        $this->post_context = $post_context;
-        $this->pre_context = $pre_context;
-        $this->vars = $vars;
-        $this->context_line = $context_line;
+        return $this->filename;
     }
+
+    /**
+     * @return int
+     */
+    public function getLineno(): int
+    {
+        return $this->lineno;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFunction(): string
+    {
+        return $this->function;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbsPath(): string
+    {
+        return $this->abs_path;
+    }
+
+    /**
+     * @return int
+     */
+    public function getColno(): int
+    {
+        return $this->colno;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLibraryFrame(): bool
+    {
+        return $this->library_frame;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModule(): string
+    {
+        return $this->module;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostContext(): string
+    {
+        return $this->post_context;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreContext(): string
+    {
+        return $this->pre_context;
+    }
+
+    /**
+     * @return object
+     */
+    public function getVars(): object
+    {
+        return $this->vars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextLine(): string
+    {
+        return $this->context_line;
+    }
+
+
 
     /**
      * @return string
@@ -194,6 +248,18 @@ class Stacktrace implements ModelInterface
             'pre_context' => $this->pre_context,
             'vars' => $this->vars,
             'context_line' => $this->context_line
+        ];
+    }
+
+    /**
+     * Define object validation rules
+     *
+     * @return array
+     */
+    public function validationRules(): array
+    {
+        return [
+            'required' => ['filename']
         ];
     }
 }

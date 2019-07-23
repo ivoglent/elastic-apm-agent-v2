@@ -8,27 +8,70 @@
 
 namespace Elastic\Apm\PhpAgent\Model;
 
+use Elastic\Apm\PhpAgent\Model\Type\SpanSubType;
+use Elastic\Apm\PhpAgent\Model\Type\SpanType;
+use Elastic\Apm\PhpAgent\Model\Type\TransactionName;
+use Elastic\Apm\PhpAgent\Model\Type\TransactionType;
 
-use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
-
-class Metricset implements ModelInterface
+class Metricset extends AbstractModel
 {
+    /**
+     * @var SpanType
+     */
+    private $span_type;
 
     /**
-     * Get object's json encoded information
-     *
-     * @return string
+     * @var SpanSubType
      */
-    public function getJsonData(): string
-    {
-        // TODO: Implement getJsonData() method.
-    }
+    private $span_subtype;
+
+    /**
+     * @var TransactionName
+     */
+    private $transaction_name;
+
+    /**
+     * @var TransactionType
+     */
+    private $transaction_type;
+
+    /**
+     * @var object
+     */
+    private $samples;
+
+    /**
+     * @var Tag
+     */
+    private $tags;
+
 
     /**
      * @return array
      */
     public function toArray(): array
     {
-        // TODO: Implement toArray() method.
+        return [
+            'timestamp' => $this->timestamp,
+            'span_type' => $this->span_type,
+            'span_subtype' => $this->span_subtype,
+            'transaction_type' => $this->transaction_type,
+            'transaction_name' => $this->transaction_name,
+            'samples' => $this->samples,
+            'tags' => $this->tags
+        ];
     }
+
+    /**
+     * Define object validation rules
+     *
+     * @return array
+     */
+    public function validationRules(): array
+    {
+        return [
+            'required' => ['samples', 'timestamp']
+        ];
+    }
+
 }

@@ -1,18 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/22/19
- * Time: 5:43 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
 
 
-use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
-use Elastic\Apm\PhpAgent\Interfaces\TimedInterface;
+use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 
-class Span extends AbstractModel implements ModelInterface, TimedInterface
+class Span extends AbstractModel
 {
     /**
      * Duration of the span in milliseconds
@@ -33,7 +26,7 @@ class Span extends AbstractModel implements ModelInterface, TimedInterface
      *
      * @ref "../stacktrace_frame.json"
      *
-     * @var mixed array | null
+     * @var Stacktrace[] | null
      */
     private $stacktrace;
 
@@ -69,7 +62,7 @@ class Span extends AbstractModel implements ModelInterface, TimedInterface
     /**
      * Span Contexts
      *
-     * @var array
+     * @var SpanContext[]
      */
     private $contexts = [];
 
@@ -80,40 +73,44 @@ class Span extends AbstractModel implements ModelInterface, TimedInterface
      */
     private $action = null;
 
-    /**
-     * Span constructor.
-     * @param string $name
-     * @param string $type
-     * @param bool $sync
-     * @param string $subtype
-     * @param string $action
-     * @internal param int $start
-     */
-    public function __construct(string $name, string $type, ?bool $sync = true, ?string $subtype, ?string $action)
-    {
-        $this->name = $name;
-        $this->type = $type;
-        $this->sync = $sync;
-        $this->subtype = $subtype;
-        $this->action = $action;
-    }
 
 
-    /**
-     * Get object's json encoded information
-     *
-     * @return string
-     */
-    public function getJsonData(): string
-    {
-        // TODO: Implement getJsonData() method.
-    }
 
     /**
      * @return array
      */
     public function toArray(): array
     {
-        // TODO: Implement toArray() method.
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'subtype' => $this->subtype,
+            'transaction_id' => $this->transaction_id,
+            'trace_id' => $this->trace_id,
+            'parent_id' => $this->parent_id,
+            'start' => $this->start,
+            'action' => $this->action,
+            'context' => $this->contexts,
+            'duration' => $this->duration,
+            'name' => $this->name,
+            'stacktrace' => $this->stacktrace,
+            'sync' => $this->sync
+        ];
+    }
+
+    /**
+     * Define object validation rules
+     *
+     * @return array
+     */
+    public function validationRules(): array
+    {
+        return [
+            'required' => ['id', 'name', 'type', 'duration', 'trace_id', 'parent_id'],
+            'maxLength' => [
+                'name' => 1024,
+                'action' => 1024
+            ]
+        ];
     }
 }

@@ -1,15 +1,57 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/22/19
- * Time: 6:09 PM
- */
-
 namespace Elastic\Apm\PhpAgent\Model\Context;
 
 
-class SpanContext
-{
+use Elastic\Apm\PhpAgent\Model\Service;
+use Elastic\Apm\PhpAgent\Model\Tag;
+use Elastic\Apm\PhpAgent\Util\BaseObject;
 
+class SpanContext extends BaseObject
+{
+    /**
+     * An object containing contextual data for database spans
+     *
+     * @var DbContext
+     */
+    private $db;
+
+    /**
+     * An object containing contextual data of the related http request.
+     *
+     * @var HttpContext
+     */
+    private $http;
+
+    /**
+     * @var Tag
+     */
+    private $tags;
+
+    /**
+     * @var Service
+     */
+    private $service;
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'db' => $this->db,
+            'http' => $this->http,
+            'tags' => $this->tags,
+            'service' => $this->service
+        ];
+    }
+
+    /**
+     * Define object validation rules
+     *
+     * @return array
+     */
+    public function validationRules(): array
+    {
+        return [];
+    }
 }
