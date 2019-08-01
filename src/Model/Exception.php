@@ -1,28 +1,21 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 2:36 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Exception extends BaseObject
 {
-    /** @var  string */
+    /** @var string */
     protected $code;
 
     /** @var   */
     protected $message;
 
-    /** @var  string */
+    /** @var string */
     protected $module;
 
-    /** @var  object */
+    /** @var object */
     protected $attributes;
 
     /** @var Stacktrace[] */
@@ -31,9 +24,8 @@ class Exception extends BaseObject
     /** @var   */
     protected $type;
 
-    /** @var  bool */
+    /** @var bool */
     protected $handled;
-    
 
     /**
      * @param string $code
@@ -68,11 +60,11 @@ class Exception extends BaseObject
     }
 
     /**
-     * @param Stacktrace[] $stacktrace
+     * @param array $stacktrace
      */
     public function setStacktrace(array $stacktrace)
     {
-        $this->stacktrace = $stacktrace;
+        $this->stacktrace = $this->getStackTraces($stacktrace);
     }
 
     /**
@@ -91,7 +83,6 @@ class Exception extends BaseObject
         $this->handled = $handled;
     }
 
-
     /**
      * @return array
      */
@@ -104,7 +95,7 @@ class Exception extends BaseObject
             'attributes' => $this->attributes,
             'stacktrace' => $this->stacktrace,
             'type' => $this->type,
-            'handled' => $this->handled
+            'handled' => $this->handled,
         ];
     }
 
@@ -116,7 +107,7 @@ class Exception extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['message', 'type']
+            'required' => ['message', 'type'],
         ];
     }
 }

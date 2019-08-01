@@ -2,7 +2,6 @@
 
 namespace Elastic\Apm\PhpAgent\Model;
 
-
 use Elastic\Apm\PhpAgent\Exception\DataInvalidException;
 use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 
@@ -31,7 +30,6 @@ class Span extends AbstractModel
      * @var string
      */
     protected $type;
-
 
     /**
      * Indicates whether the span was executed synchronously or asynchronously.
@@ -66,12 +64,13 @@ class Span extends AbstractModel
      *
      * @var string
      */
-    protected $action = null;
+    protected $action;
 
     /**
      * @param SpanContext $context
      */
-    public function setContext(SpanContext $context) {
+    public function setContext(SpanContext $context)
+    {
         $this->context = $context;
     }
 
@@ -142,7 +141,7 @@ class Span extends AbstractModel
     public function stop(): void
     {
         parent::stop();
-        $traces = $this->getStackTraces(__FILE__);
+        $traces = $this->getStackTraces();
         foreach ($traces as $trace) {
             $stacktrace = new Stacktrace($trace);
             $this->stacktrace[] = $stacktrace;
@@ -168,7 +167,7 @@ class Span extends AbstractModel
             'name' => $this->name,
             'stacktrace' => $this->stacktrace,
             'timestamp' => $this->timestamp,
-            'sync' => $this->sync
+            'sync' => $this->sync,
         ];
     }
 
@@ -183,14 +182,14 @@ class Span extends AbstractModel
             'required' => ['id', 'name', 'type', 'duration', 'trace_id', 'parent_id'],
             'maxLength' => [
                 'name' => 1024,
-                'action' => 1024
-            ]
+                'action' => 1024,
+            ],
         ];
     }
 
     /**
-     * @return string
      * @throws DataInvalidException
+     * @return string
      */
     public function getJsonData(): string
     {
@@ -198,6 +197,7 @@ class Span extends AbstractModel
         if ($this->validate()) {
             $data = $this->toArray();
         }
+
         return \json_encode($data);
     }
 }

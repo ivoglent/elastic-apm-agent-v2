@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Util;
 
+namespace Elastic\Apm\PhpAgent\Util;
 
 use Elastic\Apm\PhpAgent\Interfaces\TimerInterface;
 
@@ -20,7 +20,7 @@ class Timer implements TimerInterface
      * Use the time in micro-second or milli-second
      * @var bool|null
      */
-    private $us =  false;
+    private $us = false;
 
     public function __construct(?bool $us = true)
     {
@@ -57,11 +57,11 @@ class Timer implements TimerInterface
         if ($this->stopTime) {
             return $this->stopTime - $this->startTime;
         }
+
         return $this->now($this->us) - $this->startTime;
     }
 
     /**
-     *
      * Get current time
      *
      * @param bool|null $us
@@ -73,22 +73,27 @@ class Timer implements TimerInterface
         if ($us) {
             return $this->microSeconds();
         }
+
         return $this->milliSeconds();
     }
 
     /**
      * @return int
      */
-    private function milliSeconds(): int {
+    private function milliSeconds(): int
+    {
         $mt = explode(' ', microtime());
-        return ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
+
+        return ((int) $mt[1]) * 1000 + ((int) round($mt[0] * 1000));
     }
 
     /**
      * @return int
      */
-    private function microSeconds(): int {
+    private function microSeconds(): int
+    {
         $mt = explode(' ', microtime());
-        return ((int)$mt[1]) * 1000000 + ((int)round($mt[0] * 1000000));
+
+        return ((int) $mt[1]) * 1000000 + ((int) round($mt[0] * 1000000));
     }
 }

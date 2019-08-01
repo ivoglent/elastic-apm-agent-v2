@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Interfaces;
-
 
 use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Metricset;
@@ -17,7 +15,7 @@ interface AgentInterface
      *
      * @param string $name
      * @param string $type
-     * @param null|string $id
+     * @param string|null $id
      * @return mixed
      */
     public function startTransaction(string $name, string $type, ?string $id = null);
@@ -41,7 +39,7 @@ interface AgentInterface
      * Stop for current trace in the stack
      * Remind that, a span trace will be pushed to a trace stack and pop back for latest stopping
      *
-     * @param null|string $id
+     * @param string|null $id
      * @param SpanContext|null $context
      * @return mixed
      */
@@ -70,11 +68,16 @@ interface AgentInterface
      */
     public function getConfig(): ConfigInterface;
 
+    /**
+     * @param \Throwable $throwable
+     * @return mixed
+     */
+    public function notifyException(\Throwable $throwable);
 
     /**
      * Send all information to APM server
      *
      * @return bool
      */
-    public function send(): bool ;
+    public function send(): bool;
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Http;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -39,7 +37,7 @@ class Url extends BaseObject
     /**
      * The port of the request, e.g. '443
      *
-     * @var integer
+     * @var int
      */
     protected $port;
 
@@ -77,7 +75,7 @@ class Url extends BaseObject
             'port' => $this->port,
             'pathname' => $this->pathname,
             'search' => $this->search,
-            'hash' => $this->hash
+            'hash' => $this->hash,
         ];
     }
 

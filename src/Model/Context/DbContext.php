@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Context;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -68,8 +66,6 @@ class DbContext extends BaseObject
         $this->username = $username;
     }
 
-
-
     /**
      * @return array
      */
@@ -79,7 +75,7 @@ class DbContext extends BaseObject
             'instance' => $this->instance,
             'statement' => $this->statement,
             'type' => $this->type,
-            'username' => $this->username
+            'username' => $this->username,
         ];
     }
 
@@ -91,7 +87,7 @@ class DbContext extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['statement']
+            'required' => ['statement'],
         ];
     }
 }

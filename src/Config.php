@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent;
 
+namespace Elastic\Apm\PhpAgent;
 
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Model\Agent as AgentConfig;
@@ -11,8 +11,8 @@ use GuzzleHttp\ClientInterface;
 
 class Config implements ConfigInterface
 {
-    const AGENT_NAME = 'APM PHP Agent';
-    const AGENT_VERSION = '1.0.0';
+    public const AGENT_NAME = 'APM PHP Agent';
+    public const AGENT_VERSION = '1.0.0';
     /**
      * @var string
      */
@@ -62,13 +62,14 @@ class Config implements ConfigInterface
      * Config constructor.
      * @param string $name
      * @param string $version
-     * @param string $secret_token
-     * @param ClientInterface $client
      * @param string $server_url
+     * @param string $secret_token
+     * @param array|null $metadata
      * @param Framework $framework
      * @param User $user
+     * @param ClientInterface $client
      */
-    public function __construct( string $name, string $version, string $server_url, ?string $secret_token = null, ?array $metadata = [], ?Framework $framework = null, ?User $user = null, ?ClientInterface $client = null)
+    public function __construct(string $name, string $version, string $server_url, ?string $secret_token = null, ?array $metadata = [], ?Framework $framework = null, ?User $user = null, ?ClientInterface $client = null)
     {
         $this->name = $name;
         $this->version = $version;
@@ -92,15 +93,14 @@ class Config implements ConfigInterface
         }
 
         if (!empty($metadata)) {
-            $this->metadata  =$metadata;
+            $this->metadata = $metadata;
         }
 
         $this->agent = new AgentConfig([
             'name' => self::AGENT_NAME,
-            'version' => self::AGENT_VERSION
+            'version' => self::AGENT_VERSION,
         ]);
     }
-
 
     /**
      * Get application name

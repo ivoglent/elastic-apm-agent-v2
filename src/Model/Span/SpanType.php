@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model\Type;
 
+namespace Elastic\Apm\PhpAgent\Model\Type;
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -19,7 +19,7 @@ class SpanType extends BaseObject
     public function toArray(): array
     {
         return [
-            'type' => $this->type
+            'type' => $this->type,
         ];
     }
 
@@ -33,8 +33,8 @@ class SpanType extends BaseObject
         return [
             'required' => ['type'],
             'maxLength' => [
-                'type' => 1024
-            ]
+                'type' => 1024,
+            ],
         ];
     }
 }

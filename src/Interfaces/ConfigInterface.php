@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Interfaces;
 
 use Elastic\Apm\PhpAgent\Model\Agent as AgentConfig;
@@ -15,42 +14,42 @@ interface ConfigInterface
      *
      * @return string
      */
-    public function getAppName(): string ;
+    public function getAppName(): string;
 
     /**
      * Get application current version
      *
      * @return string
      */
-    public function getAppVersion(): string ;
+    public function getAppVersion(): string;
 
     /**
      * Get access token to connect to the server
      *
      * @return string
      */
-    public function getSecretToken(): string ;
+    public function getSecretToken(): string;
 
     /**
      * Get base url of APM server
      *
      * @return string
      */
-    public function getServerUrl(): string ;
+    public function getServerUrl(): string;
 
     /**
      * Get client which will send the request to APM server
      *
      * @return ClientInterface
      */
-    public function getClient(): ClientInterface ;
+    public function getClient(): ClientInterface;
 
     /**
      * Get framework information
      *
      * @return Framework
      */
-    public function getFramework(): ?Framework ;
+    public function getFramework(): ?Framework;
 
     /**
      * Set using framework to config
@@ -85,7 +84,7 @@ interface ConfigInterface
      *
      * @return array
      */
-    public function getMetadata(): array ;
+    public function getMetadata(): array;
 
     /**
      * Set meta data for the agent

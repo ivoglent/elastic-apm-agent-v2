@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Context;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -25,7 +23,7 @@ class HttpContext extends BaseObject
     /**
      * The status code of the http request.
      *
-     * @var integer
+     * @var int
      */
     protected $status_code;
 
@@ -53,7 +51,6 @@ class HttpContext extends BaseObject
         $this->status_code = $status_code;
     }
 
-
     /**
      * @return array
      */
@@ -62,7 +59,7 @@ class HttpContext extends BaseObject
         return [
             'url' => $this->url,
             'method' => $this->method,
-            'status_code' => $this->status_code
+            'status_code' => $this->status_code,
         ];
     }
 
@@ -76,8 +73,8 @@ class HttpContext extends BaseObject
         return [
             'required' => ['url', 'method', 'status_code'],
             'types' => [
-                'status_code' => 'integer'
-            ]
+                'status_code' => 'integer',
+            ],
         ];
     }
 }

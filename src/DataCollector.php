@@ -1,4 +1,5 @@
 <?php
+
 namespace Elastic\Apm\PhpAgent;
 
 use Elastic\Apm\PhpAgent\Exception\RuntimeException;
@@ -22,14 +23,15 @@ class DataCollector
     private $transaction;
 
     /**
-     * @return Transaction
      * @throws RuntimeException
+     * @return Transaction
      */
     public function getTransaction(): Transaction
     {
         if (null === $this->transaction) {
             throw new RuntimeException('No active transaction found!');
         }
+
         return $this->transaction;
     }
 
@@ -41,12 +43,12 @@ class DataCollector
         $this->transaction = $transaction;
     }
 
-
     /**
      * @param ModelInterface $model
      * @throws RuntimeException
      */
-    public function register(ModelInterface $model) {
+    public function register(ModelInterface $model)
+    {
         if ($model instanceof Span) {
             if (null === $this->transaction) {
                 throw new RuntimeException('No active transaction found!');
@@ -55,13 +57,13 @@ class DataCollector
         }
 
         $this->data[] = $model;
-
     }
 
     /**
      * Reset data collector by remove all registed data and transactions
      */
-    public function reset() {
+    public function reset()
+    {
         $this->transaction = null;
         $this->data = [];
     }
@@ -71,29 +73,32 @@ class DataCollector
      *
      * @return string
      */
-    public function getData() {
+    public function getData()
+    {
         $data = array_merge($this->data, [$this->transaction]);
-        return sprintf("%s\n", implode("\n", array_map(function($obj) {
+
+        return sprintf("%s\n", implode("\n", array_map(function ($obj) {
             /** @var ModelInterface $obj */
-            $itemData =  $obj->getJsonData();
+            $itemData = $obj->getJsonData();
             $itemClass = get_class($obj);
             switch ($itemClass) {
                 case Span::class:
-                    $itemData =  sprintf('{"span" : %s}', $itemData);
+                    $itemData = sprintf('{"span" : %s}', $itemData);
                 break;
                 case Transaction::class:
-                    $itemData =  sprintf('{"transaction" : %s}', $itemData);
+                    $itemData = sprintf('{"transaction" : %s}', $itemData);
                 break;
                 case Metricset::class:
-                    $itemData =  sprintf('{"metric" : %s}', $itemData);
+                    $itemData = sprintf('{"metric" : %s}', $itemData);
                 break;
                 case Metadata::class:
-                    $itemData =  sprintf('{"metadata" : %s}', $itemData);
+                    $itemData = sprintf('{"metadata" : %s}', $itemData);
                 break;
                 case Error::class:
-                    $itemData =  sprintf('{"error" : %s}', $itemData);
+                    $itemData = sprintf('{"error" : %s}', $itemData);
                 break;
             }
+
             return $itemData;
         }, $data)));
     }

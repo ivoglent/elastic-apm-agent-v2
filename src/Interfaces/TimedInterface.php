@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Interfaces;
 
+namespace Elastic\Apm\PhpAgent\Interfaces;
 
 interface TimedInterface
 {
@@ -12,6 +12,5 @@ interface TimedInterface
      *
      * @return int
      */
-    public function getTimestampStart():int ;
-
+    public function getTimestampStart(): int;
 }

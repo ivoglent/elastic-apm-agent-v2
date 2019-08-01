@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:13 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -118,8 +111,6 @@ class Service extends BaseObject
         $this->version = $version;
     }
 
-
-
     /**
      * @return array
      */
@@ -132,7 +123,7 @@ class Service extends BaseObject
             'name' => $this->name,
             'environment' => $this->environment,
             'runtime' => $this->runtime,
-            'version' => $this->version
+            'version' => $this->version,
         ];
     }
 

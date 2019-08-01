@@ -1,17 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/22/19
- * Time: 5:44 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Model\Type\SpanSubType;
 use Elastic\Apm\PhpAgent\Model\Type\SpanType;
-use Elastic\Apm\PhpAgent\Model\Type\TransactionName;
-use Elastic\Apm\PhpAgent\Model\Type\TransactionType;
 
 class Metricset extends AbstractModel
 {
@@ -26,12 +18,12 @@ class Metricset extends AbstractModel
     protected $span_subtype;
 
     /**
-     * @var TransactionName
+     * @var string
      */
     protected $transaction_name;
 
     /**
-     * @var TransactionType
+     * @var string
      */
     protected $transaction_type;
 
@@ -45,7 +37,6 @@ class Metricset extends AbstractModel
      */
     protected $tags;
 
-
     /**
      * @return array
      */
@@ -58,7 +49,7 @@ class Metricset extends AbstractModel
             'transaction_type' => $this->transaction_type,
             'transaction_name' => $this->transaction_name,
             'samples' => $this->samples,
-            'tags' => $this->tags
+            'tags' => $this->tags,
         ];
     }
 
@@ -70,8 +61,7 @@ class Metricset extends AbstractModel
     public function validationRules(): array
     {
         return [
-            'required' => ['samples', 'timestamp']
+            'required' => ['samples', 'timestamp'],
         ];
     }
-
 }

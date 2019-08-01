@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model;
 
+namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
 use Elastic\Apm\PhpAgent\Interfaces\TimedInterface;
@@ -10,11 +10,11 @@ use Elastic\Apm\PhpAgent\Util\Timer;
 
 abstract class AbstractModel extends BaseObject implements ModelInterface, TimedInterface
 {
-    /** @var  TimerInterface */
+    /** @var TimerInterface */
     protected $timer;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $duration;
     /**
@@ -46,7 +46,7 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     protected $parent_id;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $timestamp;
 
@@ -57,11 +57,11 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
         $this->id = $this->generateId(16);
     }
 
-
     /**
      * Start trace
      */
-    public function start(): void {
+    public function start(): void
+    {
         $this->timer->start();
         $this->getTimestampStart();
     }
@@ -69,7 +69,8 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     /**
      * Stop current trace
      */
-    public function stop(): void {
+    public function stop(): void
+    {
         $this->timer->stop();
         $this->duration = $this->timer->getElapsedTime();
     }
@@ -79,7 +80,8 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
      *
      * @return int
      */
-    public function getElapsedTime(): int {
+    public function getElapsedTime(): int
+    {
         return $this->timer->getElapsedTime();
     }
 
@@ -148,5 +150,4 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     {
         return $this->timestamp = $this->timer->now(true);
     }
-
 }

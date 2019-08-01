@@ -1,31 +1,24 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 2:37 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Log extends BaseObject
 {
-    /** @var  string */
+    /** @var string */
     protected $level;
 
-    /** @var  string */
+    /** @var string */
     protected $logger_name;
 
-    /** @var  string */
+    /** @var string */
     protected $message;
 
     /** @var   */
     protected $param_message;
 
-    /** @var  Stacktrace[] */
+    /** @var Stacktrace[] */
     protected $stacktrace;
 
     /**
@@ -78,7 +71,7 @@ class Log extends BaseObject
             'logger_name' => $this->logger_name,
             'message' => $this->message,
             'param_message' => $this->param_message,
-            'stacktrace' => $this->stacktrace
+            'stacktrace' => $this->stacktrace,
         ];
     }
 
@@ -90,7 +83,7 @@ class Log extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['message']
+            'required' => ['message'],
         ];
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Http;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -23,13 +21,12 @@ class Response extends BaseObject
     protected $headers;
 
     /**
-     *
      * @var bool
      */
     protected $headers_sent;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $status_code;
 
@@ -74,7 +71,7 @@ class Response extends BaseObject
             'finished' => $this->finished,
             'headers' => (object) $this->headers,
             'headers_sent' => $this->headers_sent,
-            'status_code' => $this->status_code
+            'status_code' => $this->status_code,
         ];
     }
 
@@ -88,8 +85,8 @@ class Response extends BaseObject
         return [
             'types' => [
                 'status_code' => 'integer',
-                'finished' => 'boolean'
-            ]
+                'finished' => 'boolean',
+            ],
         ];
     }
 }

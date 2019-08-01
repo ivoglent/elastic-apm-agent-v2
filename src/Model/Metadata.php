@@ -2,7 +2,6 @@
 
 namespace Elastic\Apm\PhpAgent\Model;
 
-
 use Elastic\Apm\PhpAgent\Config;
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Util\BaseObject;
@@ -17,13 +16,11 @@ class Metadata extends BaseObject
     protected $service;
 
     /**
-     *
      * @var Process
      */
     protected $process;
 
     /**
-     *
      * @var System
      */
     protected $system;
@@ -50,7 +47,7 @@ class Metadata extends BaseObject
      */
     protected $runtime = [];
 
-    /** @var  ConfigInterface */
+    /** @var ConfigInterface */
     private $config;
 
     public function __construct(ConfigInterface $config)
@@ -65,14 +62,14 @@ class Metadata extends BaseObject
             $this->service = new Service([
                 'agent' => new Agent([
                     'name' => Config::AGENT_NAME,
-                    'version' => Config::AGENT_VERSION
+                    'version' => Config::AGENT_VERSION,
                 ]),
                 'framework' => $this->config->getFramework() ?? new Framework([]),
                 'language' => new Language($this->language),
                 'runtime' => new Runtime($this->runtime),
                 'name' => $this->config->getAppName(),
                 'environment' => 'unknown',
-                'version' => $this->config->getAppVersion()
+                'version' => $this->config->getAppVersion(),
             ]);
         }
         if (null === $this->system) {
@@ -163,10 +160,6 @@ class Metadata extends BaseObject
         return $this->labels;
     }
 
-
-
-
-
     /**
      * @return array
      */
@@ -177,7 +170,7 @@ class Metadata extends BaseObject
             'process' => $this->process,
             'system' => $this->system,
             'user' => $this->user,
-            'labels' => $this->labels
+            'labels' => $this->labels,
         ];
     }
 
@@ -189,7 +182,7 @@ class Metadata extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['service']
+            'required' => ['service'],
         ];
     }
 }

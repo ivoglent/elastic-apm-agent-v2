@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([
+        __DIR__.'/src',
+        __DIR__.'/tests',
+    ]);
+
+return PhpCsFixer\Config::create()
+    ->setFinder($finder)
+    ->setUsingCache(true)
+    ->setRiskyAllowed(true)
+    ->setRules(
+        [
+            '@Symfony' => true,
+            '@Symfony:risky' => true,
+            '@PHP71Migration' => true,
+            // Classes must be in a path that matches their namespace, be at least one
+            // namespace deep and the class name should match the file name.
+            'psr0' => true,
+            // PHP arrays should be declared using the configured syntax
+            'array_syntax' => ['syntax' => 'short'],
+            // Replaces rand, srand, getrandmax functions calls with their mt_* analogs
+            'random_api_migration' => false,
+            // All items of the @param, @throws, @return, @var, and @type phpdoc tags must be aligned vertically.
+            'phpdoc_align' => false,
+            // Phpdocs short descriptions should end in either a full stop, exclamation mark, or question mark.
+            'phpdoc_summary' => false,
+            // There should be no empty lines after class opening brace.
+            'no_blank_lines_after_class_opening' => false,
+            // The body of each structure MUST be enclosed by braces. Braces should be properly placed.
+            // Body of braces should be properly indented.
+            'braces' => false,
+            // Methods must be separated with one blank line.
+            'method_separation' => false,
+            // Removes extra blank lines and/or blank lines following configuration.
+            'no_extra_blank_lines' => true,
+            // Annotations in phpdocs should be grouped together
+            // so that annotations of the same type immediately follow each other,
+            // and annotations of a different type are separated by a single blank line.
+            'phpdoc_separation' => false,
+            // Phpdocs annotation descriptions should not be a sentence.
+            'phpdoc_annotation_without_dot' => false,
+            // Ordering use statements.
+            'ordered_imports' => true,
+            // Comparison should be strict.
+            'strict_comparison' => true,
+            // Annotations in phpdocs should be ordered so that param annotations come first,
+            // then throws annotations,
+            // then return annotations.
+            'phpdoc_order' => true,
+            // There should not be useless else cases.
+            'no_useless_else' => true,
+            // There should not be an empty return statement at the end of a function.
+            'no_useless_return' => true,
+            // Calling unset on multiple items should be done in one call.
+            'combine_consecutive_unsets' => true,
+            // Ensure there is no code on the same line as the PHP open tag.
+            'linebreak_after_opening_tag' => true,
+            // Multi-line whitespace before closing semicolon are prohibited.
+            'no_multiline_whitespace_before_semicolons' => true,
+            // Convert heredoc to nowdoc if possible.
+            'heredoc_to_nowdoc' => true,
+            // Properties MUST not be explicitly initialized with null.
+            'no_null_property_initialization' => true,
+            // Phpdoc should contain @param for all params.
+            'phpdoc_add_missing_param_annotation' => true,
+            // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
+            'align_multiline_comment' => true,
+            'class_attributes_separation' => false,
+            'native_function_invocation' => false,
+            'braces' => [
+                'allow_single_line_closure' => false,
+                'position_after_functions_and_oop_constructs' => 'next',
+            ],
+        ]
+    )
+    ->setFinder($finder);

@@ -1,13 +1,12 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model;
 
+namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Language extends BaseObject
 {
     /**
-     *
      * @var string
      */
     protected $name = 'PHP';
@@ -17,7 +16,7 @@ class Language extends BaseObject
 
     public function init()
     {
-        $this->version = phpversion();
+        $this->version = PHP_VERSION;
     }
 
     /**
@@ -59,7 +58,7 @@ class Language extends BaseObject
     {
         return [
             'name' => $this->name,
-            'version' => $this->version
+            'version' => $this->version,
         ];
     }
 
@@ -73,8 +72,8 @@ class Language extends BaseObject
         return [
             'maxLength' => [
                 'name' => 1024,
-                'version' => 1024
-            ]
+                'version' => 1024,
+            ],
         ];
     }
 }

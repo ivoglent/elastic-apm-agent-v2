@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model;
 
+namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -16,7 +16,7 @@ class Stacktrace extends BaseObject
     /**
      * Line number
      *
-     * @var integer
+     * @var int
      */
     protected $lineno;
 
@@ -176,8 +176,6 @@ class Stacktrace extends BaseObject
         return $this->context_line;
     }
 
-
-
     /**
      * @return string
      */
@@ -192,32 +190,31 @@ class Stacktrace extends BaseObject
      * @param array $traces
      * @return Stacktrace[]
      */
-    public static function mapStacktrace(array $traces) : array
+    public static function mapStacktrace(array $traces): array
     {
         /** @var Stacktrace[] $stacktraces */
         $stacktraces = [];
         foreach ($traces as $trace) {
             $item = [
-                'function' => $trace['function'] ?? '(closure)'
+                'function' => $trace['function'] ?? '(closure)',
             ];
 
-            if (isset($trace['line']) === true) {
+            if (true === isset($trace['line'])) {
                 $item['lineno'] = $trace['line'];
             }
 
-            if (isset($trace['column']) === true) {
+            if (true === isset($trace['column'])) {
                 $item['colno'] = $trace['column'];
             }
 
-            if (isset($trace['file']) === true) {
+            if (true === isset($trace['file'])) {
                 $item['filename'] = basename($trace['file']);
                 $item['abs_path'] = ($trace['file']);
             }
 
-            if (isset($trace['class']) === true) {
+            if (true === isset($trace['class'])) {
                 $item['module'] = $trace['class'];
             }
-
 
             if (!isset($item['lineno'])) {
                 $item['lineno'] = 0;
@@ -226,8 +223,9 @@ class Stacktrace extends BaseObject
             if (!isset($item['filename'])) {
                 $item['filename'] = '(anonymous)';
             }
-            $stacktraces[] =  new self($item['filename'], $item['lineno'], $item['function'], $item['abs_path'], $item['colno']);
+            $stacktraces[] = new self($item['filename'], $item['lineno'], $item['function'], $item['abs_path'], $item['colno']);
         }
+
         return $stacktraces;
     }
 
@@ -247,7 +245,7 @@ class Stacktrace extends BaseObject
             'post_context' => $this->post_context,
             'pre_context' => $this->pre_context,
             'vars' => $this->vars,
-            'context_line' => $this->context_line
+            'context_line' => $this->context_line,
         ];
     }
 
@@ -259,7 +257,7 @@ class Stacktrace extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['filename']
+            'required' => ['filename'],
         ];
     }
 }

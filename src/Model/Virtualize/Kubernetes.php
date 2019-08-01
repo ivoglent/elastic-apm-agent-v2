@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:57 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model\Virtualize;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -21,7 +14,6 @@ class Kubernetes extends BaseObject
     protected $namespace;
 
     /**
-     *
      * @var Pod
      */
     protected $pod;
@@ -55,7 +47,6 @@ class Kubernetes extends BaseObject
         $this->node = $node;
     }
 
-
     /**
      * @return array
      */
@@ -64,7 +55,7 @@ class Kubernetes extends BaseObject
         return [
             'namespace' => $this->namespace,
             'pod' => $this->pod,
-            'node' => $this->node
+            'node' => $this->node,
         ];
     }
 
@@ -78,8 +69,8 @@ class Kubernetes extends BaseObject
         return [
             'required' => ['namespace'],
             'maxLength' => [
-                'namespace' => 1024
-            ]
+                'namespace' => 1024,
+            ],
         ];
     }
 }

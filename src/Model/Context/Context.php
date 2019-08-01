@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model\Context;
 
+namespace Elastic\Apm\PhpAgent\Model\Context;
 
 use Elastic\Apm\PhpAgent\Model\Http\Response;
 use Elastic\Apm\PhpAgent\Model\Service;
@@ -51,7 +51,6 @@ class Context extends BaseObject
      */
     protected $service;
 
-
     /**
      * @return array
      */
@@ -64,7 +63,7 @@ class Context extends BaseObject
             'tags' => $this->tags,
             'user' => $this->user,
             'page' => $this->page,
-            'service' => $this->service
+            'service' => $this->service,
         ];
     }
 

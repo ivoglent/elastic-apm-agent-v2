@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Util;
 
+namespace Elastic\Apm\PhpAgent\Util;
 
 use Elastic\Apm\PhpAgent\Exception\DataInvalidException;
 use Elastic\Apm\PhpAgent\Exception\InvalidConfigException;
@@ -27,9 +27,18 @@ abstract class BaseObject implements ModelInterface
     }
 
     /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return '';
+    }
+
+    /**
      * Allow children object run something after create instance succeed
      */
-    public function init() {
+    public function init()
+    {
         //This is empty function!!!
     }
 
@@ -39,9 +48,9 @@ abstract class BaseObject implements ModelInterface
      * Do not call this method directly as it is a PHP magic method that
      * will be implicitly called when executing `$value = $object->property;`.
      * @param string $name the property name
-     * @return mixed the property value
      * @throws RuntimeException if the property is not defined
      * @throws RuntimeException if the property is write-only
+     * @return mixed the property value
      * @see __set()
      */
     public function __get($name)
@@ -49,10 +58,10 @@ abstract class BaseObject implements ModelInterface
         $getter = $this->toCamel('get', $name);
         if (method_exists($this, $getter)) {
             return $this->$getter();
-        } elseif (method_exists($this,  $this->toCamel('set', $name))) {
-            throw new RuntimeException('Getting write-only property: ' . get_class($this) . '::' . $name);
+        } elseif (method_exists($this, $this->toCamel('set', $name))) {
+            throw new RuntimeException('Getting write-only property: '.get_class($this).'::'.$name);
         }
-        throw new RuntimeException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new RuntimeException('Getting unknown property: '.get_class($this).'::'.$name);
     }
     /**
      * Sets value of an object property.
@@ -72,10 +81,10 @@ abstract class BaseObject implements ModelInterface
             $this->$setter($value);
         }/* elseif (property_exists($this, $name)){
             $this->{$name} = $value;
-        }*/ elseif (method_exists($this, 'get' . $name)) {
-            throw new RuntimeException('Setting read-only property: ' . get_class($this) . '::' . $name);
+        }*/ elseif (method_exists($this, 'get'.$name)) {
+            throw new RuntimeException('Setting read-only property: '.get_class($this).'::'.$name);
         } else {
-            throw new RuntimeException('Setting unknown property: ' . get_class($this) . '::' . $name);
+            throw new RuntimeException('Setting unknown property: '.get_class($this).'::'.$name);
         }
     }
 
@@ -86,13 +95,15 @@ abstract class BaseObject implements ModelInterface
      *
      * @author Long Nguyen <long.nguyen@zinio.com>
      */
-    private function toCamel($prefix, $name) {
+    private function toCamel($prefix, $name)
+    {
         $partNames = explode('_', $name);
         $method = $prefix;
         foreach ($partNames as &$partName) {
             $partName = ucfirst($partName);
         }
-        return $method . implode('', $partNames);
+
+        return $method.implode('', $partNames);
     }
 
     /**
@@ -102,13 +113,14 @@ abstract class BaseObject implements ModelInterface
      *
      * @author Long Nguyen <long.nguyen@zinio.com>
      */
-    protected function camelToField($prefix, $camel) {
+    protected function camelToField($prefix, $camel)
+    {
         $camel = preg_replace("/^$prefix/", '', $camel);
         $camel[0] = strtolower($camel[0]);
-        for ($i = 0; $i < strlen($camel); $i++) {
+        for ($i = 0; $i < strlen($camel); ++$i) {
             if (ctype_upper($camel[$i])) {
                 $camel[$i] = strtolower($camel[$i]);
-                $camel = substr($camel, 0, $i) . '_' . substr($camel, $i);
+                $camel = substr($camel, 0, $i).'_'.substr($camel, $i);
             }
         }
         //$camel = preg_replace('/[A-Z]/', '_${1}', $camel);
@@ -130,8 +142,9 @@ abstract class BaseObject implements ModelInterface
     {
         $getter = $this->toCamel('get', $name);
         if (method_exists($this, $getter)) {
-            return $this->$getter() !== null;
+            return null !== $this->$getter();
         }
+
         return false;
     }
 
@@ -146,11 +159,11 @@ abstract class BaseObject implements ModelInterface
      */
     public function __unset($name)
     {
-        $setter = 'set' . $name;
+        $setter = 'set'.$name;
         if (method_exists($this, $setter)) {
             $this->$setter(null);
-        } elseif (method_exists($this, 'get' . $name)) {
-            throw new InvalidConfigException('Unsetting read-only property: ' . get_class($this) . '::' . $name);
+        } elseif (method_exists($this, 'get'.$name)) {
+            throw new InvalidConfigException('Unsetting read-only property: '.get_class($this).'::'.$name);
         }
     }
 
@@ -164,7 +177,7 @@ abstract class BaseObject implements ModelInterface
      */
     public function __call($name, $params)
     {
-        throw new RuntimeException('Calling unknown method: ' . get_class($this) . "::$name()");
+        throw new RuntimeException('Calling unknown method: '.get_class($this)."::$name()");
     }
 
     /**
@@ -191,7 +204,7 @@ abstract class BaseObject implements ModelInterface
      */
     public function canGetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'get' . $name) || method_exists($this, $this->toCamel('get', $name)) || ($checkVars && property_exists($this, $name));
+        return method_exists($this, 'get'.$name) || method_exists($this, $this->toCamel('get', $name)) || ($checkVars && property_exists($this, $name));
     }
 
     /**
@@ -204,7 +217,7 @@ abstract class BaseObject implements ModelInterface
      */
     public function canSetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'set' . $name) || method_exists($this, $this->toCamel('set', $name)) || ($checkVars && property_exists($this, $name));
+        return method_exists($this, 'set'.$name) || method_exists($this, $this->toCamel('set', $name)) || ($checkVars && property_exists($this, $name));
     }
     /**
      * Returns a value indicating whether a method is defined
@@ -218,8 +231,8 @@ abstract class BaseObject implements ModelInterface
     }
 
     /**
-     * @return string
      * @throws DataInvalidException
+     * @return string
      */
     public function getJsonData(): string
     {
@@ -227,16 +240,18 @@ abstract class BaseObject implements ModelInterface
         if ($this->validate()) {
             $data = $this->toArray();
         }
+
         return \json_encode($data, JSON_FORCE_OBJECT);
     }
 
     /**
      * Make properties validation
      *
-     * @return bool
      * @throws DataInvalidException
+     * @return bool
      */
-    public function validate(): bool {
+    public function validate(): bool
+    {
         $rules = $this->validationRules();
         if (!is_array($rules)) {
             $rules = [];
@@ -261,11 +276,11 @@ abstract class BaseObject implements ModelInterface
                 'id' => 1024,
                 'trace_id' => 1024,
                 'transaction_id' => 1024,
-                'parent_id' => 1024
-            ]
+                'parent_id' => 1024,
+            ],
         ], $rules['maxLength']);
         foreach ($rules['required'] as $property) {
-            if (!property_exists($this, $property) || $this->{$property} === null || $this->{$property} === '') {
+            if (!property_exists($this, $property) || null === $this->{$property} || '' === $this->{$property}) {
                 throw new DataInvalidException([$property], get_called_class(), 'Field(s) required is empty or not exists.');
             }
         }
@@ -282,30 +297,31 @@ abstract class BaseObject implements ModelInterface
 
         foreach ($rules['maxLength'] as $property => $length) {
             if ($this->canGetProperty($property) && strlen($this->{$property}) > $length) {
-                throw new DataInvalidException([$property], get_called_class(),'Can not get or Max length reached at : ' . $length);
+                throw new DataInvalidException([$property], get_called_class(), 'Can not get or Max length reached at : '.$length);
             }
         }
 
         foreach ($rules['types'] as $property => $type) {
             if (!empty($this->{$type}) && gettype($this->{$property}) !== $type) {
-                throw new DataInvalidException([$property], get_called_class(),'Invalid data type : ' . $type);
+                throw new DataInvalidException([$property], get_called_class(), 'Invalid data type : '.$type);
             }
         }
+
         return true;
     }
-
 
     /**
      * @param int|null $length
      * @return bool|string
      */
-    public function generateId(?int $length = 16): string {
+    public function generateId(?int $length = 16): string
+    {
         return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
     }
 
     /**
-     * @return string
      * @throws DataInvalidException
+     * @return string
      */
     public function __toString()
     {
@@ -313,8 +329,8 @@ abstract class BaseObject implements ModelInterface
     }
 
     /**
-     * @return array
      * @throws DataInvalidException
+     * @return array
      */
     public function jsonSerialize()
     {
@@ -322,36 +338,39 @@ abstract class BaseObject implements ModelInterface
         if ($this->validate()) {
             $data = $this->toArray();
         }
+
         return $data;
     }
 
     /**
+     * @param array $traces
      * @return array
-     *
-     * @param string $endingFile
      */
-    public function getStackTraces($endingFile = '') {
+    public function getStackTraces($traces = [])
+    {
         $stacktrace = [];
-        $traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, $this->limitTrace + 2);
-        $traces = array_slice($traces, 2);
+        if (empty($traces)) {
+            $traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, $this->limitTrace + 2);
+            $traces = array_slice($traces, 2);
+        }
+        $i = 0;
         foreach ($traces as $trace) {
             $item = [
-                'function' => $trace['function'] ?? '(closure)'
+                'function' => $trace['function'] ?? '(closure)',
             ];
 
-            if (isset($trace['line']) === true) {
+            if (true === isset($trace['line'])) {
                 $item['lineno'] = $trace['line'];
             }
 
-            if (isset($trace['file']) === true) {
+            if (true === isset($trace['file'])) {
                 $item['filename'] = basename($trace['file']);
                 $item['abs_path'] = ($trace['file']);
             }
 
-            if (isset($trace['class']) === true) {
+            if (true === isset($trace['class'])) {
                 $item['module'] = $trace['class'];
             }
-
 
             if (!isset($item['lineno'])) {
                 $item['lineno'] = 0;
@@ -361,8 +380,13 @@ abstract class BaseObject implements ModelInterface
                 $item['filename'] = '(anonymous)';
             }
 
-            $stacktrace[] =  $item;
+            $stacktrace[] = $item;
+            ++$i;
+            if ($i >= $this->limitTrace) {
+                break;
+            }
         }
+
         return $stacktrace;
     }
 }

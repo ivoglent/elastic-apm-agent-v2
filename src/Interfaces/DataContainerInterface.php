@@ -1,8 +1,7 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Interfaces;
 
+namespace Elastic\Apm\PhpAgent\Interfaces;
 
 interface DataContainerInterface
 {
-
 }

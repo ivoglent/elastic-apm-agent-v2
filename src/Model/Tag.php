@@ -1,14 +1,12 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Tag extends BaseObject
 {
-    /** @var array  */
+    /** @var array */
     protected $properties = [];
 
     public function __construct($config = [])
@@ -23,8 +21,10 @@ class Tag extends BaseObject
      * @param $value
      * @return $this
      */
-    public function set($name, $value) {
+    public function set($name, $value)
+    {
         $this->properties[$name] = $value;
+
         return $this;
     }
 

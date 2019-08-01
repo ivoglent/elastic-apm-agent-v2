@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:59 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model\Virtualize;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -28,14 +21,13 @@ class Node extends BaseObject
         $this->name = $name;
     }
 
-
     /**
      * @return array
      */
     public function toArray(): array
     {
         return [
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 
@@ -49,8 +41,8 @@ class Node extends BaseObject
         return [
             'required' => ['name'],
             'maxLength' => [
-                'name' => 1024
-            ]
+                'name' => 1024,
+            ],
         ];
     }
 }

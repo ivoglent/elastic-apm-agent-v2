@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:57 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model\Virtualize;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -43,8 +36,6 @@ class Pod extends BaseObject
         $this->uid = $uid;
     }
 
-
-
     /**
      * @return array
      */
@@ -52,7 +43,7 @@ class Pod extends BaseObject
     {
         return [
             'name' => $this->name,
-            'uid' => $this->uid
+            'uid' => $this->uid,
         ];
     }
 
@@ -64,11 +55,11 @@ class Pod extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => [ 'name', 'uid'],
+            'required' => ['name', 'uid'],
             'maxLength' => [
                 'name' => 1024,
-                'uid' => 1024
-            ]
+                'uid' => 1024,
+            ],
         ];
     }
 }

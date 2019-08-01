@@ -1,18 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/22/19
- * Time: 5:43 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Model\Context\Context;
-use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Transaction\SpanCount;
-use Elastic\Apm\PhpAgent\Model\Transaction\TransactionName;
-use Elastic\Apm\PhpAgent\Model\Transaction\TransactionType;
 
 class Transaction extends AbstractModel
 {
@@ -92,11 +83,13 @@ class Transaction extends AbstractModel
      * @param Span $span
      * @return Span
      */
-    public function setSpan(Span &$span): Span {
+    public function setSpan(Span &$span): Span
+    {
         $span->setTransactionId($this->id);
         $span->setTraceId($this->trace_id);
         $span->setParentId($this->id);
         $this->span_count->increase();
+
         return $span;
     }
 
@@ -133,6 +126,14 @@ class Transaction extends AbstractModel
     }
 
     /**
+     * @param bool $sampled
+     */
+    public function setSampled(bool $sampled)
+    {
+        $this->sampled = $sampled;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -149,7 +150,7 @@ class Transaction extends AbstractModel
             'duration' => $this->duration,
             'result' => $this->result,
             'marks' => $this->marks,
-            'sampled' => $this->sampled
+            'sampled' => $this->sampled,
         ];
     }
 
@@ -164,8 +165,8 @@ class Transaction extends AbstractModel
             'required' => ['id', 'trace_id', 'span_count', 'duration', 'type', 'name'],
             'types' => [
                 'duration' => 'float',
-                'sampled' => 'boolean'
-            ]
+                'sampled' => 'boolean',
+            ],
         ];
     }
 }

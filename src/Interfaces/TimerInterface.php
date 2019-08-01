@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Interfaces;
 
+namespace Elastic\Apm\PhpAgent\Interfaces;
 
 interface TimerInterface
 {
@@ -23,15 +23,14 @@ interface TimerInterface
      *
      * @return int
      */
-    public function getElapsedTime(): int ;
+    public function getElapsedTime(): int;
 
     /**
-     *
      * Get current time
      *
      * @param bool|null $us
      *
      * @return int
      */
-    public function now(?bool $us = true): int ;
+    public function now(?bool $us = true): int;
 }

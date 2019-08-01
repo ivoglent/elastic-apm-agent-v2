@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Transaction;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -11,19 +9,20 @@ class SpanCount extends BaseObject
     /**
      * Number of correlated spans that are recorded.
      *
-     * @var integer
+     * @var int
      */
     protected $started;
 
     /**
      * Number of spans that have been dropped by the agent recording the transaction.
      *
-     * @var integer
+     * @var int
      */
     protected $dropped;
 
-    public function increase() {
-        $this->started += 1;
+    public function increase()
+    {
+        ++$this->started;
     }
 
     /**
@@ -33,7 +32,7 @@ class SpanCount extends BaseObject
     {
         return [
             'started' => $this->started,
-            'dropped' => $this->dropped
+            'dropped' => $this->dropped,
         ];
     }
 
@@ -69,8 +68,6 @@ class SpanCount extends BaseObject
         $this->dropped = $dropped;
     }
 
-
-
     /**
      * Define object validation rules
      *
@@ -82,8 +79,8 @@ class SpanCount extends BaseObject
             'required' => ['started'],
             'types' => [
                 'started' => 'integer',
-                'dropped' => 'integer'
-            ]
+                'dropped' => 'integer',
+            ],
         ];
     }
 }

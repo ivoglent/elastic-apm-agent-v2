@@ -1,9 +1,13 @@
 <?php
+
 namespace Elastic\Apm\PhpAgent;
 
 use Elastic\Apm\PhpAgent\Interfaces\AgentInterface;
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
+use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
 use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
+use Elastic\Apm\PhpAgent\Model\Error;
+use Elastic\Apm\PhpAgent\Model\Exception;
 use Elastic\Apm\PhpAgent\Model\Metadata;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
@@ -25,6 +29,9 @@ class Agent implements AgentInterface
      */
     private $dataCollector;
 
+    /** @var ModelInterface */
+    private $currentParent;
+
     /**
      * @var array
      */
@@ -43,7 +50,7 @@ class Agent implements AgentInterface
      *
      * @param string $name
      * @param string $type
-     * @param null|string $id
+     * @param string|null $id
      * @return mixed
      */
     public function startTransaction(string $name, string $type, ?string $id = null)
@@ -51,10 +58,11 @@ class Agent implements AgentInterface
         $transaction = new Transaction([
            'name' => $name,
            'type' => $type,
-           'id' => $id
+           'id' => $id,
         ]);
         $transaction->start();
         $this->dataCollector->setTransaction($transaction);
+        $this->currentParent = $transaction;
     }
 
     /**
@@ -65,6 +73,7 @@ class Agent implements AgentInterface
     public function stopTransaction(): void
     {
         $this->dataCollector->getTransaction()->stop();
+        $this->currentParent = null;
         $this->send();
     }
 
@@ -73,19 +82,21 @@ class Agent implements AgentInterface
      *
      * @param string $name Name of trace span
      * @param string $type Type of trace span
-     * @return Span
      * @throws Exception\RuntimeException
+     * @return Span
      */
     public function startTrace(string $name, string $type): Span
     {
         $span = new Span([
             'name' => $name,
-            'type' => $type
+            'type' => $type,
         ]);
         //Set transaction / trace
         $span->start();
         $span->setStart($this->dataCollector->getTransaction()->getElapsedTime());
         $this->traces[$span->getId()] = $span;
+        $this->currentParent = $span;
+
         return  $span;
     }
 
@@ -93,13 +104,13 @@ class Agent implements AgentInterface
      * Stop for current trace in the stack
      * Remind that, a span trace will be pushed to a trace stack and pop back for latest stopping
      *
-     * @param null|string $id
+     * @param string|null $id
      * @param SpanContext|null $context
      * @return mixed
      */
     public function stopTrace(?string $id = null, ?SpanContext $context = null)
     {
-        /** @var Span $span */
+        /* @var Span $span */
         if (null === $id) {
             $span = array_pop($this->traces);
         } else {
@@ -109,11 +120,13 @@ class Agent implements AgentInterface
 
         $span->setContext($context);
         $span->stop();
+        $this->currentParent = null;
         $this->dataCollector->register($span);
     }
 
     /**
      * Register metricset for current transaction
+     *
      *
      * @param Metricset $metric
      * @return mixed
@@ -145,26 +158,52 @@ class Agent implements AgentInterface
     }
 
     /**
+     * @param \Throwable $throwable
+     * @return mixed|void
+     */
+    public function notifyException(\Throwable $throwable)
+    {
+        $exception = new Exception([
+            'code' => $throwable->getCode(),
+            'message' => $throwable->getMessage(),
+            'type' => get_class($throwable),
+        ]);
+        $exception->setStacktrace($throwable->getTrace());
+        $error = new Error([
+            'parent_id' => null === $this->currentParent ? $this->dataCollector->getTransaction()->getId() : $this->currentParent->getId(),
+            'transaction' => $this->dataCollector->getTransaction(),
+            'exception' => $exception,
+        ]);
+
+        $this->dataCollector->register($error);
+    }
+
+    /**
      * Send all information to APM server
      *
-     * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return bool
      */
     public function send(): bool
     {
         $client = $this->config->getClient();
-        $request = $this->makeRequest();//print_r($request->getBody()->getContents());exit;
+        $request = $this->makeRequest();
+        print_r($request->getBody()->getContents());
+        exit;
         /** @var ResponseInterface $response */
         $response = $client->send($request);
+
         return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }
 
     /**
      * @return RequestInterface
      */
-    private function makeRequest(): RequestInterface {
+    private function makeRequest(): RequestInterface
+    {
         $endpoint = sprintf('%s/intake/v2/events', $this->config->getServerUrl());
         $data = $this->dataCollector->getData();
+
         return new Request(
             'POST',
             $endpoint,
@@ -176,15 +215,17 @@ class Agent implements AgentInterface
     /**
      * @return array
      */
-    private function getRequestHeaders() {
+    private function getRequestHeaders()
+    {
         $headers = [
             'Content-Type' => 'application/x-ndjson',
-            'User-Agent'   => sprintf('%s/%s', $this->config->getAgentConfig()->getName(), $this->config->getAgentConfig()->getVersion()),
+            'User-Agent' => sprintf('%s/%s', $this->config->getAgentConfig()->getName(), $this->config->getAgentConfig()->getVersion()),
         ];
         $secretToken = $this->config->getSecretToken();
         if (!empty($secretToken)) {
             $headers['Authorization'] = sprintf('Bearer %s', $secretToken);
         }
+
         return $headers;
     }
 }

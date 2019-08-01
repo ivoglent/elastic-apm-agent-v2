@@ -1,20 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:23 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Framework extends BaseObject
 {
     /**
-     *
      * @var string
      */
     protected $name = 'unknown';
@@ -54,7 +46,6 @@ class Framework extends BaseObject
         $this->version = $version;
     }
 
-
     /**
      * @return array
      */
@@ -62,7 +53,7 @@ class Framework extends BaseObject
     {
         return [
             'name' => $this->name,
-            'version' => $this->version
+            'version' => $this->version,
         ];
     }
 
@@ -76,8 +67,8 @@ class Framework extends BaseObject
         return [
             'maxLength' => [
                 'name' => 1024,
-                'version' => 1024
-            ]
+                'version' => 1024,
+            ],
         ];
     }
 }

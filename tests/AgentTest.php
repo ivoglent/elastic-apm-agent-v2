@@ -18,7 +18,7 @@ class AgentTest extends TestCase
         $config = new Config('UnitTest', '10.0', 'http://30.108.132.62:8200', 'apmtoken');
         /** @var \Elastic\Apm\PhpAgent\Agent $agent */
         $agent = new Agent($config);
-        $agent->startTransaction('test3', 'test');
+        $agent->startTransaction('test4', 'test');
 
         $trace = $agent->startTrace('Query select', 'sql');
         $context = new SpanContext([
@@ -32,7 +32,13 @@ class AgentTest extends TestCase
                 'status_code' => 200
             ])
         ]);
+
+        $exception = new \Exception('Test');
+        $agent->notifyException($exception);
+
         $agent->stopTrace($trace->getId(), $context);
+
+
 
         $agent->stopTransaction();
     }

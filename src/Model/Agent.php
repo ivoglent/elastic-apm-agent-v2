@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:21 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -58,7 +51,6 @@ class Agent extends BaseObject
         $this->ephemeral_id = $ephemeral_id;
     }
 
-
     /**
      * @return string
      */
@@ -83,7 +75,6 @@ class Agent extends BaseObject
         return $this->ephemeral_id;
     }
 
-
     /**
      * @return array
      */
@@ -92,7 +83,7 @@ class Agent extends BaseObject
         return [
             'name' => $this->name,
             'version' => $this->version,
-            'ephemeral_id' => $this->ephemeral_id
+            'ephemeral_id' => $this->ephemeral_id,
         ];
     }
 
@@ -108,8 +99,8 @@ class Agent extends BaseObject
             'maxLength' => [
                 'name' => 1024,
                 'version' => 1024,
-                'ephemeral_id' => 1024
-            ]
+                'ephemeral_id' => 1024,
+            ],
         ];
     }
 }

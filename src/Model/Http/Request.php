@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Elastic\Apm\PhpAgent\Model\Http;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 

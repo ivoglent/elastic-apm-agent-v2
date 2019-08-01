@@ -1,6 +1,6 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Model\Context;
 
+namespace Elastic\Apm\PhpAgent\Model\Context;
 
 use Elastic\Apm\PhpAgent\Model\Service;
 use Elastic\Apm\PhpAgent\Model\Tag;
@@ -96,8 +96,6 @@ class SpanContext extends BaseObject
         $this->service = $service;
     }
 
-
-
     /**
      * @return array
      */
@@ -107,7 +105,7 @@ class SpanContext extends BaseObject
             'db' => $this->db,
             'http' => $this->http,
             'tags' => $this->tags,
-            'service' => $this->service
+            'service' => $this->service,
         ];
     }
 

@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: long.nguyenviet
- * Date: 7/23/19
- * Time: 3:31 PM
- */
 
 namespace Elastic\Apm\PhpAgent\Model;
-
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
@@ -39,7 +32,7 @@ class Process extends BaseObject
 
     public function init()
     {
-        if(null === $this->pid) {
+        if (null === $this->pid) {
             $this->pid = getmypid();
         }
     }
@@ -53,7 +46,7 @@ class Process extends BaseObject
             'pid' => $this->pid,
             'ppid' => $this->ppid,
             'title' => $this->title,
-            'argv' => $this->argv
+            'argv' => $this->argv,
         ];
     }
 
@@ -65,7 +58,7 @@ class Process extends BaseObject
     public function validationRules(): array
     {
         return [
-            'required' => ['pid']
+            'required' => ['pid'],
         ];
     }
 }

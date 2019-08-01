@@ -1,8 +1,7 @@
 <?php
-namespace Elastic\Apm\PhpAgent\Exception;
 
+namespace Elastic\Apm\PhpAgent\Exception;
 
 class InvalidConfigException extends \Exception
 {
-
 }
