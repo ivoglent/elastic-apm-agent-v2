@@ -13,24 +13,90 @@ class SpanContext extends BaseObject
      *
      * @var DbContext
      */
-    private $db;
+    protected $db;
 
     /**
      * An object containing contextual data of the related http request.
      *
      * @var HttpContext
      */
-    private $http;
+    protected $http;
 
     /**
      * @var Tag
      */
-    private $tags;
+    protected $tags;
 
     /**
      * @var Service
      */
-    private $service;
+    protected $service;
+
+    /**
+     * @return DbContext
+     */
+    public function getDb(): ?DbContext
+    {
+        return $this->db;
+    }
+
+    /**
+     * @param DbContext $db
+     */
+    public function setDb(DbContext $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * @return HttpContext
+     */
+    public function getHttp(): ?HttpContext
+    {
+        return $this->http;
+    }
+
+    /**
+     * @param HttpContext $http
+     */
+    public function setHttp(HttpContext $http)
+    {
+        $this->http = $http;
+    }
+
+    /**
+     * @return Tag
+     */
+    public function getTags(): ?Tag
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param Tag $tags
+     */
+    public function setTags(Tag $tags)
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * @return Service
+     */
+    public function getService(): Service
+    {
+        return $this->service;
+    }
+
+    /**
+     * @param Service $service
+     */
+    public function setService(Service $service)
+    {
+        $this->service = $service;
+    }
+
+
 
     /**
      * @return array

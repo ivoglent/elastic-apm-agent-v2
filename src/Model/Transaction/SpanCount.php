@@ -13,14 +13,18 @@ class SpanCount extends BaseObject
      *
      * @var integer
      */
-    private $started;
+    protected $started;
 
     /**
      * Number of spans that have been dropped by the agent recording the transaction.
      *
      * @var integer
      */
-    private $dropped;
+    protected $dropped;
+
+    public function increase() {
+        $this->started += 1;
+    }
 
     /**
      * @return array

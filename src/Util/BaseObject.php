@@ -9,6 +9,13 @@ use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
 
 abstract class BaseObject implements ModelInterface
 {
+    /**
+     * Limitation of debug back trace
+     *
+     * @var int
+     */
+    public $limitTrace = 10;
+
     public function __construct(?array $config = [])
     {
         foreach ($config as $key => $value) {
@@ -121,7 +128,7 @@ abstract class BaseObject implements ModelInterface
      */
     public function __isset($name)
     {
-        $getter = 'get' . $name;
+        $getter = $this->toCamel('get', $name);
         if (method_exists($this, $getter)) {
             return $this->$getter() !== null;
         }
@@ -259,7 +266,7 @@ abstract class BaseObject implements ModelInterface
         ], $rules['maxLength']);
         foreach ($rules['required'] as $property) {
             if (!property_exists($this, $property) || $this->{$property} === null || $this->{$property} === '') {
-                throw new DataInvalidException([$property], 'Field(s) required is empty or not exists');
+                throw new DataInvalidException([$property], get_called_class(), 'Field(s) required is empty or not exists.');
             }
         }
 
@@ -267,7 +274,7 @@ abstract class BaseObject implements ModelInterface
             if (!empty($this->{$property})) {
                 foreach ($depends as $depend) {
                     if (!isset($this->{$depend}) || empty($this->{$depend})) {
-                        throw new DataInvalidException([$depend], "Field(s) required when {$property} was used.");
+                        throw new DataInvalidException([$depend], get_called_class(), "Field(s) required when {$property} was used.");
                     }
                 }
             }
@@ -275,13 +282,13 @@ abstract class BaseObject implements ModelInterface
 
         foreach ($rules['maxLength'] as $property => $length) {
             if ($this->canGetProperty($property) && strlen($this->{$property}) > $length) {
-                throw new DataInvalidException([$property], 'Can not get or Max length reached at : ' . $length);
+                throw new DataInvalidException([$property], get_called_class(),'Can not get or Max length reached at : ' . $length);
             }
         }
 
         foreach ($rules['types'] as $property => $type) {
             if (!empty($this->{$type}) && gettype($this->{$property}) !== $type) {
-                throw new DataInvalidException([$property], 'Invalid data type : ' . $type);
+                throw new DataInvalidException([$property], get_called_class(),'Invalid data type : ' . $type);
             }
         }
         return true;
@@ -316,5 +323,46 @@ abstract class BaseObject implements ModelInterface
             $data = $this->toArray();
         }
         return $data;
+    }
+
+    /**
+     * @return array
+     *
+     * @param string $endingFile
+     */
+    public function getStackTraces($endingFile = '') {
+        $stacktrace = [];
+        $traces = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, $this->limitTrace + 2);
+        $traces = array_slice($traces, 2);
+        foreach ($traces as $trace) {
+            $item = [
+                'function' => $trace['function'] ?? '(closure)'
+            ];
+
+            if (isset($trace['line']) === true) {
+                $item['lineno'] = $trace['line'];
+            }
+
+            if (isset($trace['file']) === true) {
+                $item['filename'] = basename($trace['file']);
+                $item['abs_path'] = ($trace['file']);
+            }
+
+            if (isset($trace['class']) === true) {
+                $item['module'] = $trace['class'];
+            }
+
+
+            if (!isset($item['lineno'])) {
+                $item['lineno'] = 0;
+            }
+
+            if (!isset($item['filename'])) {
+                $item['filename'] = '(anonymous)';
+            }
+
+            $stacktrace[] =  $item;
+        }
+        return $stacktrace;
     }
 }

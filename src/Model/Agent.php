@@ -18,21 +18,21 @@ class Agent extends BaseObject
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Version of the Elastic APM agent, e.g."1.0.0
      *
      * @var string
      */
-    private $version;
+    protected $version;
 
     /**
      * Free format ID used for metrics correlation by some agents
      *
      * @var string
      */
-    private $ephemeral_id;
+    protected $ephemeral_id;
 
     /**
      * @param string $name
@@ -78,7 +78,7 @@ class Agent extends BaseObject
     /**
      * @return string
      */
-    public function getEphemeralId(): string
+    public function getEphemeralId(): ?string
     {
         return $this->ephemeral_id;
     }

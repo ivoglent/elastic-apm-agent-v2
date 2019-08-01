@@ -11,7 +11,7 @@ class SpanSubType extends BaseObject
      *
      * @var string
      */
-    private $subtype;
+    protected $subtype;
 
     /**
      * @return array

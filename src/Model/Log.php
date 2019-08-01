@@ -14,19 +14,19 @@ use Elastic\Apm\PhpAgent\Util\BaseObject;
 class Log extends BaseObject
 {
     /** @var  string */
-    private $level;
+    protected $level;
 
     /** @var  string */
-    private $logger_name;
+    protected $logger_name;
 
     /** @var  string */
-    private $message;
+    protected $message;
 
     /** @var   */
-    private $param_message;
+    protected $param_message;
 
     /** @var  Stacktrace[] */
-    private $stacktrace;
+    protected $stacktrace;
 
     /**
      * @param string $level

@@ -18,49 +18,107 @@ class Service extends BaseObject
      *
      * @var  Agent
      */
-    private $agent;
+    protected $agent;
 
     /**
      * Name and version of the web framework used
      *
      * @var Framework
      */
-    private $framework;
+    protected $framework;
 
     /**
      * Name and version of the programming language used
      *
      * @var Language
      */
-    private $language;
+    protected $language;
 
     /**
      * Immutable name of the service emitting this event
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Environment name of the service, e.g. "production" or "staging"
      *
      * @var string
      */
-    private $environment;
+    protected $environment;
 
     /**
      * Name and version of the language runtime running this service
      *
      * @var Runtime
      */
-    private $runtime;
+    protected $runtime;
 
     /**
      * Version of the service emitting this event
      *
      * @var string
      */
-    private $version;
+    protected $version;
+
+    /**
+     * @param Agent $agent
+     */
+    public function setAgent(Agent $agent)
+    {
+        $this->agent = $agent;
+    }
+
+    /**
+     * @param Framework $framework
+     */
+    public function setFramework(Framework $framework)
+    {
+        $this->framework = $framework;
+    }
+
+    /**
+     * @param Language $language
+     */
+    public function setLanguage(Language $language)
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $environment
+     */
+    public function setEnvironment(string $environment)
+    {
+        $this->environment = $environment;
+    }
+
+    /**
+     * @param Runtime $runtime
+     */
+    public function setRuntime(Runtime $runtime)
+    {
+        $this->runtime = $runtime;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion(string $version)
+    {
+        $this->version = $version;
+    }
+
+
 
     /**
      * @return array

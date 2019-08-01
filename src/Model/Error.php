@@ -13,19 +13,19 @@ class Error extends AbstractModel implements ModelInterface
      *
      * @var  Transaction
      */
-    private $transaction;
+    protected $transaction;
 
     /** @var  Context */
-    private $context;
+    protected $context;
 
     /** @var  string */
-    private $culprit;
+    protected $culprit;
 
     /** @var  Exception */
-    private $exception;
+    protected $exception;
 
     /** @var  Log */
-    private $log;
+    protected $log;
 
     /**
      * @param Transaction $transaction

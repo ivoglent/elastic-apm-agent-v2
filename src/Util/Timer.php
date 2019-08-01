@@ -54,7 +54,10 @@ class Timer implements TimerInterface
      */
     public function getElapsedTime(): int
     {
-        return $this->stopTime - $this->startTime;
+        if ($this->stopTime) {
+            return $this->stopTime - $this->startTime;
+        }
+        return $this->now($this->us) - $this->startTime;
     }
 
     /**

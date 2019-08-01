@@ -18,7 +18,7 @@ class Container extends BaseObject
      *
      * @var string
      */
-    private $id;
+    protected $id;
 
     /**
      * @param string $id

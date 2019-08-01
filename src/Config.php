@@ -54,6 +54,11 @@ class Config implements ConfigInterface
     private $user;
 
     /**
+     * @var array
+     */
+    private $metadata = [];
+
+    /**
      * Config constructor.
      * @param string $name
      * @param string $version
@@ -63,7 +68,7 @@ class Config implements ConfigInterface
      * @param Framework $framework
      * @param User $user
      */
-    public function __construct( string $name, string $version, string $server_url, ?string $secret_token = null, ?Framework $framework = null, ?User $user = null, ?ClientInterface $client = null)
+    public function __construct( string $name, string $version, string $server_url, ?string $secret_token = null, ?array $metadata = [], ?Framework $framework = null, ?User $user = null, ?ClientInterface $client = null)
     {
         $this->name = $name;
         $this->version = $version;
@@ -84,6 +89,10 @@ class Config implements ConfigInterface
 
         if (null !== $user) {
             $this->user = $user;
+        }
+
+        if (!empty($metadata)) {
+            $this->metadata  =$metadata;
         }
 
         $this->agent = new AgentConfig([
@@ -148,7 +157,7 @@ class Config implements ConfigInterface
      *
      * @return Framework
      */
-    public function getFramework(): Framework
+    public function getFramework(): ?Framework
     {
         return $this->framework;
     }
@@ -191,5 +200,25 @@ class Config implements ConfigInterface
     public function getAgentConfig(): AgentConfig
     {
         return $this->agent;
+    }
+    /**
+     * Get registered metadata for this agent
+     *
+     * @return array
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Set meta data for the agent
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function setMetadata(array $data)
+    {
+        $this->metadata = $data;
     }
 }

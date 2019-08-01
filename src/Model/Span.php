@@ -3,23 +3,18 @@
 namespace Elastic\Apm\PhpAgent\Model;
 
 
+use Elastic\Apm\PhpAgent\Exception\DataInvalidException;
 use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 
 class Span extends AbstractModel
 {
-    /**
-     * Duration of the span in milliseconds
-     *
-     * @var int
-     */
-    private $duration;
 
     /**
      * Generic designation of a span in the scope of a transaction
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * List of stack frames with variable attributes (eg: lineno, filename, etc)
@@ -28,14 +23,14 @@ class Span extends AbstractModel
      *
      * @var Stacktrace[] | null
      */
-    private $stacktrace;
+    protected $stacktrace;
 
     /**
      * Keyword of specific relevance in the service's domain (eg: 'db.postgresql.query', 'template.erb', etc)
      *
      * @var string
      */
-    private $type;
+    protected $type;
 
 
     /**
@@ -43,38 +38,116 @@ class Span extends AbstractModel
      *
      * @var bool
      */
-    private $sync = false;
+    protected $sync = false;
 
     /**
      * Offset relative to the transaction's timestamp identifying the start of the span, in milliseconds
      *
      * @var int
      */
-    private $start;
+    protected $start;
 
     /**
      * A further sub-division of the type (e.g. postgresql, elasticsearch)
      *
      * @var string
      */
-    private $subtype;
+    protected $subtype;
 
     /**
      * Span Contexts
      *
-     * @var SpanContext[]
+     * @var SpanContext
      */
-    private $contexts = [];
+    protected $context;
 
     /**
      * The specific kind of event within the sub-type represented by the span (e.g. query, connect)
      *
      * @var string
      */
-    private $action = null;
+    protected $action = null;
 
+    /**
+     * @param SpanContext $context
+     */
+    public function setContext(SpanContext $context) {
+        $this->context = $context;
+    }
 
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
 
+    /**
+     * @param mixed $stacktrace
+     */
+    public function setStacktrace($stacktrace)
+    {
+        $this->stacktrace = $stacktrace;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param bool $sync
+     */
+    public function setSync(bool $sync)
+    {
+        $this->sync = $sync;
+    }
+
+    /**
+     * @param int $start
+     */
+    public function setStart(int $start)
+    {
+        $this->start = $start;
+    }
+
+    /**
+     * @param string $subtype
+     */
+    public function setSubtype(string $subtype)
+    {
+        $this->subtype = $subtype;
+    }
+
+    /**
+     * @param SpanContext[] $contexts
+     */
+    public function setContexts(array $contexts)
+    {
+        $this->contexts = $contexts;
+    }
+
+    /**
+     * @param string $action
+     */
+    public function setAction(string $action)
+    {
+        $this->action = $action;
+    }
+
+    public function stop(): void
+    {
+        parent::stop();
+        $traces = $this->getStackTraces(__FILE__);
+        foreach ($traces as $trace) {
+            $stacktrace = new Stacktrace($trace);
+            $this->stacktrace[] = $stacktrace;
+        }
+    }
 
     /**
      * @return array
@@ -90,10 +163,11 @@ class Span extends AbstractModel
             'parent_id' => $this->parent_id,
             'start' => $this->start,
             'action' => $this->action,
-            'context' => $this->contexts,
+            'context' => $this->context,
             'duration' => $this->duration,
             'name' => $this->name,
             'stacktrace' => $this->stacktrace,
+            'timestamp' => $this->timestamp,
             'sync' => $this->sync
         ];
     }
@@ -112,5 +186,18 @@ class Span extends AbstractModel
                 'action' => 1024
             ]
         ];
+    }
+
+    /**
+     * @return string
+     * @throws DataInvalidException
+     */
+    public function getJsonData(): string
+    {
+        $data = [];
+        if ($this->validate()) {
+            $data = $this->toArray();
+        }
+        return \json_encode($data);
     }
 }

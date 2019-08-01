@@ -9,6 +9,7 @@
 namespace Elastic\Apm\PhpAgent\Model;
 
 use Elastic\Apm\PhpAgent\Model\Context\Context;
+use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Transaction\SpanCount;
 use Elastic\Apm\PhpAgent\Model\Transaction\TransactionName;
 use Elastic\Apm\PhpAgent\Model\Transaction\TransactionType;
@@ -16,17 +17,12 @@ use Elastic\Apm\PhpAgent\Model\Transaction\TransactionType;
 class Transaction extends AbstractModel
 {
     /**
-     * @var Span[]
-     */
-    protected $spans = [];
-
-    /**
-     * @var TransactionName
+     * @var string
      */
     public $name;
 
     /**
-     * @var TransactionType
+     * @var string
      */
     public $type;
 
@@ -70,31 +66,18 @@ class Transaction extends AbstractModel
 
     public function __construct(?array $config = [])
     {
-        $this->type = new TransactionType($config);
-        $this->name = new TransactionName($config);
-        if (!empty($config['id'])) {
-            $this->id = $config['id'];
-        } else {
+        parent::__construct($config);
+        if (null === $this->id) {
             $this->id = $this->generateId(16);
         }
 
-        if (!empty($config['trace_id'])) {
-            $this->trace_id = $config['trace_id'];
-        } else {
+        if (null === $this->trace_id) {
             $this->trace_id = $this->generateId(16);
         }
+
         if (null === $this->span_count) {
             $this->span_count = new SpanCount(['started' => 0, 'dropped' => 0]);
         }
-        parent::__construct([]);
-    }
-
-    /**
-     * @return SpanCount
-     */
-    public function getSpanCount(): SpanCount
-    {
-        return $this->span_count;
     }
 
     /**
@@ -107,15 +90,47 @@ class Transaction extends AbstractModel
 
     /**
      * @param Span $span
+     * @return Span
      */
-    public function setSpan(Span $span) {
+    public function setSpan(Span &$span): Span {
         $span->setTransactionId($this->id);
         $span->setTraceId($this->trace_id);
         $span->setParentId($this->id);
-        $this->spans[] = $span;
-        $this->span_count->setStarted(count($this->spans));
+        $this->span_count->increase();
+        return $span;
     }
 
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
 
     /**
      * @return array

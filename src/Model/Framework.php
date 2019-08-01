@@ -17,10 +17,44 @@ class Framework extends BaseObject
      *
      * @var string
      */
-    private $name;
+    protected $name = 'unknown';
 
     /** @var   */
-    private $version;
+    protected $version = 'unknown';
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param mixed $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+    }
+
+
     /**
      * @return array
      */

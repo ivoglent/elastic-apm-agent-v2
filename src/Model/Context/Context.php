@@ -15,41 +15,41 @@ class Context extends BaseObject
      *
      * @var object
      */
-    private $custom;
+    protected $custom;
 
     /**
      * @var Response
      */
-    private $response;
+    protected $response;
 
     /**
      * @var Response
      */
-    private $request;
+    protected $request;
 
     /**
      * @var Tag
      */
-    private $tags;
+    protected $tags;
 
     /**
      * Describes the correlated user for this event. If user data are provided here, all user related information from metadata is ignored, otherwise the metadata's user information will be stored with the event.
      *
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * @var object
      */
-    private $page;
+    protected $page;
 
     /**
      * Service related information can be sent per event. Provided information will override the more generic information from metadata, non provided fields will be set according to the metadata information.
      *
      * @var Service
      */
-    private $service;
+    protected $service;
 
 
     /**

@@ -9,7 +9,7 @@ use Elastic\Apm\PhpAgent\Util\BaseObject;
 class Tag extends BaseObject
 {
     /** @var array  */
-    private $properties = [];
+    protected $properties = [];
 
     public function __construct($config = [])
     {

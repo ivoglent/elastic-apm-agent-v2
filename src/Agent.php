@@ -1,13 +1,13 @@
 <?php
 namespace Elastic\Apm\PhpAgent;
 
-
 use Elastic\Apm\PhpAgent\Interfaces\AgentInterface;
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
+use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
+use Elastic\Apm\PhpAgent\Model\Metadata;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
 use Elastic\Apm\PhpAgent\Model\Transaction;
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -25,10 +25,16 @@ class Agent implements AgentInterface
      */
     private $dataCollector;
 
+    /**
+     * @var array
+     */
+    private $traces = [];
+
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
         $this->dataCollector = new DataCollector();
+        $this->dataCollector->register(new Metadata($config));
     }
 
     /**
@@ -78,8 +84,8 @@ class Agent implements AgentInterface
         ]);
         //Set transaction / trace
         $span->start();
-
-        $this->dataCollector->register($span);
+        $span->setStart($this->dataCollector->getTransaction()->getElapsedTime());
+        $this->traces[$span->getId()] = $span;
         return  $span;
     }
 
@@ -87,11 +93,23 @@ class Agent implements AgentInterface
      * Stop for current trace in the stack
      * Remind that, a span trace will be pushed to a trace stack and pop back for latest stopping
      *
+     * @param null|string $id
+     * @param SpanContext|null $context
      * @return mixed
      */
-    public function stopTrace()
+    public function stopTrace(?string $id = null, ?SpanContext $context = null)
     {
-        // TODO: Implement stopTrace() method.
+        /** @var Span $span */
+        if (null === $id) {
+            $span = array_pop($this->traces);
+        } else {
+            $span = $this->traces[$id];
+            unset($this->traces[$id]);
+        }
+
+        $span->setContext($context);
+        $span->stop();
+        $this->dataCollector->register($span);
     }
 
     /**
@@ -135,16 +153,10 @@ class Agent implements AgentInterface
     public function send(): bool
     {
         $client = $this->config->getClient();
-        try {
-            $request = $this->makeRequest();
-            /** @var ResponseInterface $response */
-            $response = $client->send($request);
-            return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
-        } catch (\Exception $e) {
-            //Silent
-            print_r($e);
-        }
-        return false;
+        $request = $this->makeRequest();//print_r($request->getBody()->getContents());exit;
+        /** @var ResponseInterface $response */
+        $response = $client->send($request);
+        return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }
 
     /**

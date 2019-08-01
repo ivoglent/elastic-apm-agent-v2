@@ -4,6 +4,7 @@
 namespace Elastic\Apm\PhpAgent\Interfaces;
 
 
+use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
 use SebastianBergmann\Timer\RuntimeException;
@@ -40,9 +41,11 @@ interface AgentInterface
      * Stop for current trace in the stack
      * Remind that, a span trace will be pushed to a trace stack and pop back for latest stopping
      *
+     * @param null|string $id
+     * @param SpanContext|null $context
      * @return mixed
      */
-    public function stopTrace();
+    public function stopTrace(?string $id = null, ?SpanContext $context = null);
 
     /**
      * Register metricset for current transaction

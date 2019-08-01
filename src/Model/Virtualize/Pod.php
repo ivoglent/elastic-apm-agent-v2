@@ -18,14 +18,14 @@ class Pod extends BaseObject
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Kubernetes pod uid
      *
      * @var string
      */
-    private $uid;
+    protected $uid;
 
     /**
      * @param string $name

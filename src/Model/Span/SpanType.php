@@ -11,7 +11,7 @@ class SpanType extends BaseObject
      *
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @return array

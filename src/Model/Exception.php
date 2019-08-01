@@ -14,25 +14,25 @@ use Elastic\Apm\PhpAgent\Util\BaseObject;
 class Exception extends BaseObject
 {
     /** @var  string */
-    private $code;
+    protected $code;
 
     /** @var   */
-    private $message;
+    protected $message;
 
     /** @var  string */
-    private $module;
+    protected $module;
 
     /** @var  object */
-    private $attributes;
+    protected $attributes;
 
     /** @var Stacktrace[] */
-    private $stacktrace = [];
+    protected $stacktrace = [];
 
     /** @var   */
-    private $type;
+    protected $type;
 
     /** @var  bool */
-    private $handled;
+    protected $handled;
     
 
     /**

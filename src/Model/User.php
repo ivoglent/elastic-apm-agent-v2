@@ -13,21 +13,21 @@ class User extends BaseObject
      *
      * @var string
      */
-    private $id;
+    protected $id;
 
     /**
      * Email of the logged in user
      *
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * The username of the logged in user
      *
      * @var string
      */
-    private $username;
+    protected $username;
 
     /**
      * @return array

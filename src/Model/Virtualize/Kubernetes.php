@@ -18,18 +18,18 @@ class Kubernetes extends BaseObject
      *
      * @var string
      */
-    private $namespace;
+    protected $namespace;
 
     /**
      *
      * @var Pod
      */
-    private $pod;
+    protected $pod;
 
     /**
      * @var Node
      */
-    private $node;
+    protected $node;
 
     /**
      * @param string $namespace

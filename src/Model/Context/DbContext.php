@@ -13,28 +13,62 @@ class DbContext extends BaseObject
      *
      * @var string
      */
-    private $instance;
+    protected $instance;
 
     /**
      * A database statement (e.g. query) for the given database type
      *
      * @var string
      */
-    private $statement;
+    protected $statement;
 
     /**
      * Database type. For any SQL database, "sql". For others, the lower-case database category, e.g. "cassandra", "hbase", or "redis"
      *
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * Username for accessing database
      *
      * @var string
      */
-    private $username;
+    protected $username;
+
+    /**
+     * @param string $instance
+     */
+    public function setInstance(string $instance)
+    {
+        $this->instance = $instance;
+    }
+
+    /**
+     * @param string $statement
+     */
+    public function setStatement(string $statement)
+    {
+        $this->statement = $statement;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username)
+    {
+        $this->username = $username;
+    }
+
+
 
     /**
      * @return array

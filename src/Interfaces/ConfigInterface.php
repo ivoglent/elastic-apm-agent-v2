@@ -50,7 +50,7 @@ interface ConfigInterface
      *
      * @return Framework
      */
-    public function getFramework(): Framework ;
+    public function getFramework(): ?Framework ;
 
     /**
      * Set using framework to config
@@ -79,4 +79,19 @@ interface ConfigInterface
      * @return AgentConfig
      */
     public function getAgentConfig(): AgentConfig;
+
+    /**
+     * Get registered metadata for this agent
+     *
+     * @return array
+     */
+    public function getMetadata(): array ;
+
+    /**
+     * Set meta data for the agent
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function setMetadata(array $data);
 }

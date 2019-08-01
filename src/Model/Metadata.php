@@ -3,6 +3,8 @@
 namespace Elastic\Apm\PhpAgent\Model;
 
 
+use Elastic\Apm\PhpAgent\Config;
+use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
 class Metadata extends BaseObject
@@ -12,31 +14,74 @@ class Metadata extends BaseObject
      *
      * @var Service
      */
-    private $service;
+    protected $service;
 
     /**
      *
      * @var Process
      */
-    private $process;
+    protected $process;
 
     /**
      *
      * @var System
      */
-    private $system;
+    protected $system;
 
     /**
      * Describes the authenticated User for a request.
      *
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Tag
      */
-    private $labels;
+    protected $labels;
+
+    /**
+     * @var array
+     */
+    protected $language = [];
+
+    /**
+     * @var array
+     */
+    protected $runtime = [];
+
+    /** @var  ConfigInterface */
+    private $config;
+
+    public function __construct(ConfigInterface $config)
+    {
+        $this->config = $config;
+        parent::__construct($config->getMetadata());
+    }
+
+    public function init()
+    {
+        if (null === $this->service) {
+            $this->service = new Service([
+                'agent' => new Agent([
+                    'name' => Config::AGENT_NAME,
+                    'version' => Config::AGENT_VERSION
+                ]),
+                'framework' => $this->config->getFramework() ?? new Framework([]),
+                'language' => new Language($this->language),
+                'runtime' => new Runtime($this->runtime),
+                'name' => $this->config->getAppName(),
+                'environment' => 'unknown',
+                'version' => $this->config->getAppVersion()
+            ]);
+        }
+        if (null === $this->system) {
+            $this->system = new System();
+        }
+        if (null === $this->process) {
+            $this->process = new Process();
+        }
+    }
 
     /**
      * @param Service $service
@@ -77,6 +122,47 @@ class Metadata extends BaseObject
     {
         $this->labels = $labels;
     }
+
+    /**
+     * @return Service
+     */
+    public function getService(): Service
+    {
+        return $this->service;
+    }
+
+    /**
+     * @return Process
+     */
+    public function getProcess(): Process
+    {
+        return $this->process;
+    }
+
+    /**
+     * @return System
+     */
+    public function getSystem(): System
+    {
+        return $this->system;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return Tag
+     */
+    public function getLabels(): Tag
+    {
+        return $this->labels;
+    }
+
 
 
 

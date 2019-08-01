@@ -18,24 +18,31 @@ class Process extends BaseObject
      *
      * @var int
      */
-    private $pid;
+    protected $pid;
 
     /**
      * Parent process ID of the service
      *
      * @var int
      */
-    private $ppid;
+    protected $ppid;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var array
      */
-    private $argv = [];
+    protected $argv;
+
+    public function init()
+    {
+        if(null === $this->pid) {
+            $this->pid = getmypid();
+        }
+    }
 
     /**
      * @return array

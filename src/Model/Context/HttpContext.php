@@ -13,21 +13,21 @@ class HttpContext extends BaseObject
      *
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * The method of the http request.
      *
      * @var string
      */
-    private $method;
+    protected $method;
 
     /**
      * The status code of the http request.
      *
      * @var integer
      */
-    private $status_code;
+    protected $status_code;
 
     /**
      * @param string $url

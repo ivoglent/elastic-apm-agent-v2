@@ -136,7 +136,7 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
      */
     public function setParentId(string $parentId)
     {
-        $this->parentId = $parentId;
+        $this->parent_id = $parentId;
     }
 
     /**
@@ -148,4 +148,5 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     {
         return $this->timestamp = $this->timer->now(true);
     }
+
 }

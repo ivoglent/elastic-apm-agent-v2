@@ -18,32 +18,32 @@ class Metricset extends AbstractModel
     /**
      * @var SpanType
      */
-    private $span_type;
+    protected $span_type;
 
     /**
      * @var SpanSubType
      */
-    private $span_subtype;
+    protected $span_subtype;
 
     /**
      * @var TransactionName
      */
-    private $transaction_name;
+    protected $transaction_name;
 
     /**
      * @var TransactionType
      */
-    private $transaction_type;
+    protected $transaction_type;
 
     /**
      * @var object
      */
-    private $samples;
+    protected $samples;
 
     /**
      * @var Tag
      */
-    private $tags;
+    protected $tags;
 
 
     /**

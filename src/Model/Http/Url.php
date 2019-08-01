@@ -13,56 +13,56 @@ class Url extends BaseObject
      *
      * @var string
      */
-    private $raw;
+    protected $raw;
 
     /**
      * The protocol of the request, e.g. 'https:'.
      *
      * @var string
      */
-    private $protocol;
+    protected $protocol;
 
     /**
      * The full, possibly agent-assembled URL of the request, e.g https://example.com:443/search?q=elasticsearch#top
      *
      * @var string
      */
-    private $full;
+    protected $full;
 
     /**
      * The hostname of the request, e.g. 'example.com'.
      *
      * @var string
      */
-    private $hostname;
+    protected $hostname;
 
     /**
      * The port of the request, e.g. '443
      *
      * @var integer
      */
-    private $port;
+    protected $port;
 
     /**
      * The path of the request, e.g. '/search
      *
      * @var string
      */
-    private $pathname;
+    protected $pathname;
 
     /**
      * The search describes the query string of the request. It is expected to have values delimited by ampersands.
      *
      * @var string
      */
-    private $search;
+    protected $search;
 
     /**
      * The hash of the request URL, e.g. 'top'
      *
      * @var string
      */
-    private $hash;
+    protected $hash;
 
     /**
      * @return array

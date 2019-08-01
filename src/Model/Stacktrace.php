@@ -11,42 +11,42 @@ class Stacktrace extends BaseObject
      *
      * @var string
      */
-    private $filename;
+    protected $filename;
 
     /**
      * Line number
      *
      * @var integer
      */
-    private $lineno;
+    protected $lineno;
 
     /**
      * Called function
      *
      * @var string
      */
-    private $function;
+    protected $function;
 
     /**
      * Absolute path to file
      *
      * @var string
      */
-    private $abs_path;
+    protected $abs_path;
 
     /**
      * Column number
      *
      * @var int
      */
-    private $colno;
+    protected $colno;
 
     /**
      * A boolean, indicating if this frame is from a library or user code
      *
      * @var bool
      */
-    private $library_frame;
+    protected $library_frame;
     /**
      * Get object's json encoded information
      *
@@ -58,35 +58,35 @@ class Stacktrace extends BaseObject
      *
      * @var string
      */
-    private $module;
+    protected $module;
 
     /**
      * The lines of code after the stack frame
      *
      * @var string
      */
-    private $post_context;
+    protected $post_context;
 
     /**
      * The lines of code before the stack frame
      *
      * @var string
      */
-    private $pre_context;
+    protected $pre_context;
 
     /**
      * Local variables for this stack frame
      *
      * @var object
      */
-    private $vars;
+    protected $vars;
 
     /**
      * The line of code part of the stack frame
      *
      * @var string
      */
-    private $context_line;
+    protected $context_line;
 
     /**
      * @return string

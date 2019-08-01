@@ -13,25 +13,25 @@ class Response extends BaseObject
      *
      * @var bool
      */
-    private $finished;
+    protected $finished;
 
     /**
      * A mapping of HTTP headers of the response object
      *
      * @var object
      */
-    private $headers;
+    protected $headers;
 
     /**
      *
      * @var bool
      */
-    private $headers_sent;
+    protected $headers_sent;
 
     /**
      * @var integer
      */
-    private $status_code;
+    protected $status_code;
 
     /**
      * @param bool $finished
