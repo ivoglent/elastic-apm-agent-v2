@@ -26,9 +26,9 @@ interface ConfigInterface
     /**
      * Get access token to connect to the server
      *
-     * @return string
+     * @return string|null
      */
-    public function getSecretToken(): string;
+    public function getSecretToken(): ?string;
 
     /**
      * Get base url of APM server

@@ -125,9 +125,9 @@ class Config implements ConfigInterface
     /**
      * Get access token to connect to the server
      *
-     * @return string
+     * @return string|null
      */
-    public function getSecretToken(): string
+    public function getSecretToken(): ?string
     {
         return $this->secret_token;
     }

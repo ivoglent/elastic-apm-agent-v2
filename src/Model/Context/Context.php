@@ -2,6 +2,7 @@
 
 namespace Elastic\Apm\PhpAgent\Model\Context;
 
+use Elastic\Apm\PhpAgent\Model\Http\Request;
 use Elastic\Apm\PhpAgent\Model\Http\Response;
 use Elastic\Apm\PhpAgent\Model\Service;
 use Elastic\Apm\PhpAgent\Model\Tag;
@@ -23,7 +24,7 @@ class Context extends BaseObject
     protected $response;
 
     /**
-     * @var Response
+     * @var Request
      */
     protected $request;
 
@@ -50,6 +51,19 @@ class Context extends BaseObject
      * @var Service
      */
     protected $service;
+
+    public function init()
+    {
+        parent::init();
+        if (!( php_sapi_name() == 'cli' )) {
+            $url =  (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+            $this->request = new Request([
+                'url' => $url,
+                'method' => $_SERVER['REQUEST_METHOD']
+            ]);
+        }
+
+    }
 
     /**
      * @return array

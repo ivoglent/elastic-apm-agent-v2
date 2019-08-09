@@ -15,7 +15,7 @@ class AgentTest extends TestCase
 {
 
     public function testTest() {
-        $config = new Config('UnitTest', '10.0', 'http://30.108.132.62:8200', 'apmtoken');
+        $config = new Config('UnitTest2', '10.0', 'http://30.108.132.89:8200');
         /** @var \Elastic\Apm\PhpAgent\Agent $agent */
         $agent = new Agent($config);
         $agent->startTransaction('test4', 'test');

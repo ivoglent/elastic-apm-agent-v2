@@ -2,6 +2,7 @@
 
 namespace Elastic\Apm\PhpAgent;
 
+use Elastic\Apm\PhpAgent\Exception\RuntimeException;
 use Elastic\Apm\PhpAgent\Interfaces\AgentInterface;
 use Elastic\Apm\PhpAgent\Interfaces\ConfigInterface;
 use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
@@ -12,10 +13,11 @@ use Elastic\Apm\PhpAgent\Model\Metadata;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
 use Elastic\Apm\PhpAgent\Model\Transaction;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use SebastianBergmann\Timer\RuntimeException;
+use Throwable;
 
 class Agent implements AgentInterface
 {
@@ -37,6 +39,11 @@ class Agent implements AgentInterface
      */
     private $traces = [];
 
+    /**
+     * Agent constructor.
+     * @param ConfigInterface $config
+     * @throws RuntimeException
+     */
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
@@ -67,12 +74,12 @@ class Agent implements AgentInterface
 
     /**
      * Stop current transaction
-     * @throws RuntimeException if transaction did not started yet.
-     * @throws Exception\RuntimeException
+     * @throws RuntimeException
+     * @throws GuzzleException
      */
-    public function stopTransaction(): void
+    public function stopTransaction(?string $result = null): void
     {
-        $this->dataCollector->getTransaction()->stop();
+        $this->dataCollector->getTransaction()->stop($result);
         $this->currentParent = null;
         $this->send();
     }
@@ -82,8 +89,8 @@ class Agent implements AgentInterface
      *
      * @param string $name Name of trace span
      * @param string $type Type of trace span
-     * @throws Exception\RuntimeException
      * @return Span
+     * @throws RuntimeException
      */
     public function startTrace(string $name, string $type): Span
     {
@@ -107,6 +114,7 @@ class Agent implements AgentInterface
      * @param string|null $id
      * @param SpanContext|null $context
      * @return mixed
+     * @throws RuntimeException
      */
     public function stopTrace(?string $id = null, ?SpanContext $context = null)
     {
@@ -160,8 +168,9 @@ class Agent implements AgentInterface
     /**
      * @param \Throwable $throwable
      * @return mixed|void
+     * @throws RuntimeException
      */
-    public function notifyException(\Throwable $throwable)
+    public function notifyException(Throwable $throwable)
     {
         $exception = new Exception([
             'code' => $throwable->getCode(),
@@ -181,15 +190,13 @@ class Agent implements AgentInterface
     /**
      * Send all information to APM server
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      * @return bool
      */
     public function send(): bool
     {
         $client = $this->config->getClient();
         $request = $this->makeRequest();
-        print_r($request->getBody()->getContents());
-        exit;
         /** @var ResponseInterface $response */
         $response = $client->send($request);
 

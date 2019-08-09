@@ -69,6 +69,7 @@ class Transaction extends AbstractModel
         if (null === $this->span_count) {
             $this->span_count = new SpanCount(['started' => 0, 'dropped' => 0]);
         }
+        $this->context = new Context();
     }
 
     /**
@@ -131,6 +132,15 @@ class Transaction extends AbstractModel
     public function setSampled(bool $sampled)
     {
         $this->sampled = $sampled;
+    }
+
+    /**
+     * @param string|null $result
+     */
+    public function stop(?string $result = null): void
+    {
+        parent::stop();
+        $this->result = $result;
     }
 
     /**
