@@ -53,7 +53,7 @@ class Transaction extends AbstractModel
      *
      * @var bool
      */
-    protected $sampled;
+    protected $sampled = true;
 
     public function __construct(?array $config = [])
     {
@@ -140,6 +140,16 @@ class Transaction extends AbstractModel
     public function stop(?string $result = null): void
     {
         parent::stop();
+        if ($result) {
+            $this->result = $result;
+        }
+    }
+
+    /**
+     * @param string $result
+     */
+    public function setResult(string $result): void
+    {
         $this->result = $result;
     }
 

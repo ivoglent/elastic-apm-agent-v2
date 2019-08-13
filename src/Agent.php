@@ -85,6 +85,14 @@ class Agent implements AgentInterface
     }
 
     /**
+     * @return Transaction
+     * @throws RuntimeException
+     */
+    public function getTransaction(): Transaction {
+        return $this->dataCollector->getTransaction();
+    }
+
+    /**
      * Start trace with a transaction span
      *
      * @param string $name Name of trace span
@@ -129,7 +137,11 @@ class Agent implements AgentInterface
         $span->setContext($context);
         $span->stop();
         $this->currentParent = null;
-        $this->dataCollector->register($span);
+        $this->register($span);
+    }
+
+    public function register(ModelInterface $model) {
+        $this->dataCollector->register($model);
     }
 
     /**
@@ -199,18 +211,16 @@ class Agent implements AgentInterface
         $request = $this->makeRequest();
         /** @var ResponseInterface $response */
         $response = $client->send($request);
-
         return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }
 
     /**
      * @return RequestInterface
      */
-    private function makeRequest(): RequestInterface
+    protected function makeRequest(): RequestInterface
     {
         $endpoint = sprintf('%s/intake/v2/events', $this->config->getServerUrl());
         $data = $this->dataCollector->getData();
-
         return new Request(
             'POST',
             $endpoint,

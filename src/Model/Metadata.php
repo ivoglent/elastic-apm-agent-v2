@@ -68,7 +68,7 @@ class Metadata extends BaseObject
                 'language' => new Language($this->language),
                 'runtime' => new Runtime($this->runtime),
                 'name' => $this->config->getAppName(),
-                'environment' => 'unknown',
+                'environment' => $this->config->getEnvironment(),
                 'version' => $this->config->getAppVersion(),
             ]);
         }

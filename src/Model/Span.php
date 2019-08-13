@@ -36,7 +36,7 @@ class Span extends AbstractModel
      *
      * @var bool
      */
-    protected $sync = false;
+    protected $sync = true;
 
     /**
      * Offset relative to the transaction's timestamp identifying the start of the span, in milliseconds
@@ -85,9 +85,12 @@ class Span extends AbstractModel
     /**
      * @param mixed $stacktrace
      */
-    public function setStacktrace($stacktrace)
+    public function setStacktrace(array $traces)
     {
-        $this->stacktrace = $stacktrace;
+        foreach ($traces as $trace) {
+            $stacktrace = new Stacktrace($trace);
+            $this->stacktrace[] = $stacktrace;
+        }
     }
 
     /**
@@ -137,6 +140,24 @@ class Span extends AbstractModel
     {
         $this->action = $action;
     }
+
+    /**
+     * @param float $duration
+     */
+    public function setDuration(float $duration): void
+    {
+        $this->duration = $duration;
+    }
+
+    /**
+     * @param int $timestamp
+     */
+    public function setTimestamp(int $timestamp): void
+    {
+        $this->timestamp = $timestamp;
+    }
+
+
 
     public function stop(): void
     {

@@ -42,6 +42,21 @@ class Request extends BaseObject
         $this->method = $method;
     }
 
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
 
 
     /**

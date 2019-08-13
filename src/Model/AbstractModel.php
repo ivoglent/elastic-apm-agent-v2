@@ -14,7 +14,7 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     protected $timer;
 
     /**
-     * @var int
+     * @var float
      */
     protected $duration;
     /**

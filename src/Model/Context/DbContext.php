@@ -4,7 +4,7 @@ namespace Elastic\Apm\PhpAgent\Model\Context;
 
 use Elastic\Apm\PhpAgent\Util\BaseObject;
 
-class DbContext extends BaseObject
+class DbContext extends SpanContext
 {
     /**
      * Database instance name

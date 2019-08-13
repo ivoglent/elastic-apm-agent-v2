@@ -54,6 +54,11 @@ class Config implements ConfigInterface
     private $user;
 
     /**
+     * @var string
+     */
+    private $environment;
+
+    /**
      * @var array
      */
     private $metadata = [];
@@ -220,5 +225,21 @@ class Config implements ConfigInterface
     public function setMetadata(array $data)
     {
         $this->metadata = $data;
+    }
+
+    /**
+     * @param string $environment
+     */
+    public function setEnvironment(string $environment): void
+    {
+        $this->environment = $environment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment(): string
+    {
+        return $this->environment;
     }
 }

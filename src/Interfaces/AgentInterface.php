@@ -5,6 +5,7 @@ namespace Elastic\Apm\PhpAgent\Interfaces;
 use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
+use Elastic\Apm\PhpAgent\Model\Transaction;
 use SebastianBergmann\Timer\RuntimeException;
 
 interface AgentInterface
@@ -25,6 +26,11 @@ interface AgentInterface
      * @throws RuntimeException if transaction did not started yet.
      */
     public function stopTransaction(): void;
+
+    /**
+     * @return Transaction
+     */
+    public function getTransaction(): Transaction;
 
     /**
      * Start trace with a transaction span

@@ -93,4 +93,11 @@ interface ConfigInterface
      * @return mixed
      */
     public function setMetadata(array $data);
+
+    /**
+     * Get current env
+     *
+     * @return string
+     */
+    public function getEnvironment(): string ;
 }
