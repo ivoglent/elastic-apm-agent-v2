@@ -47,8 +47,13 @@ class Agent implements AgentInterface
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
+    }
+
+    private function init() {
+        $this->traces = [];
+        $this->currentParent = null;
         $this->dataCollector = new DataCollector();
-        $this->dataCollector->register(new Metadata($config));
+        $this->dataCollector->register(new Metadata($this->config));
     }
 
     /**
@@ -134,7 +139,7 @@ class Agent implements AgentInterface
             unset($this->traces[$id]);
         }
 
-        $span->setContext($context);
+        $span->setContext($context->getSpanType(), $context);
         $span->stop();
         $this->currentParent = null;
         $this->register($span);
@@ -205,12 +210,15 @@ class Agent implements AgentInterface
      * @throws GuzzleException
      * @return bool
      */
-    public function send(): bool
+    public function send(?RequestInterface $request = null): bool
     {
         $client = $this->config->getClient();
-        $request = $this->makeRequest();
+        if (null === $request) {
+            $request = $this->makeRequest();
+        }
         /** @var ResponseInterface $response */
         $response = $client->send($request);
+        $this->init();
         return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }
 

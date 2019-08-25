@@ -33,6 +33,11 @@ class SpanContext extends BaseObject
     protected $service;
 
     /**
+     * @var string
+     */
+    protected $spanType = 'db';
+
+    /**
      * @return DbContext
      */
     public function getDb(): ?DbContext
@@ -107,6 +112,22 @@ class SpanContext extends BaseObject
             'tags' => $this->tags,
             'service' => $this->service,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpanType(): string
+    {
+        return $this->spanType;
+    }
+
+    /**
+     * @param string $spanType
+     */
+    public function setSpanType(string $spanType): void
+    {
+        $this->spanType = $spanType;
     }
 
     /**

@@ -150,4 +150,14 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     {
         return $this->timestamp = $this->timer->now(true);
     }
+
+    /**
+     * @return int
+     */
+    public function getTimestamp(): int
+    {
+        return $this->timestamp;
+    }
+
+    
 }

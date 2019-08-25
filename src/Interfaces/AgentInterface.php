@@ -6,6 +6,7 @@ use Elastic\Apm\PhpAgent\Model\Context\SpanContext;
 use Elastic\Apm\PhpAgent\Model\Metricset;
 use Elastic\Apm\PhpAgent\Model\Span;
 use Elastic\Apm\PhpAgent\Model\Transaction;
+use Psr\Http\Message\RequestInterface;
 use SebastianBergmann\Timer\RuntimeException;
 
 interface AgentInterface
@@ -85,5 +86,5 @@ interface AgentInterface
      *
      * @return bool
      */
-    public function send(): bool;
+    public function send(?RequestInterface $request = null): bool;
 }

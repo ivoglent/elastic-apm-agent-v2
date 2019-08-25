@@ -55,9 +55,9 @@ class Span extends AbstractModel
     /**
      * Span Contexts
      *
-     * @var SpanContext
+     * @var array
      */
-    protected $context;
+    protected $contexts;
 
     /**
      * The specific kind of event within the sub-type represented by the span (e.g. query, connect)
@@ -69,9 +69,9 @@ class Span extends AbstractModel
     /**
      * @param SpanContext $context
      */
-    public function setContext(SpanContext $context)
+    public function setContext(string $type, SpanContext $context)
     {
-        $this->context = $context;
+        $this->contexts[$type] = $context;
     }
 
     /**
@@ -87,10 +87,8 @@ class Span extends AbstractModel
      */
     public function setStacktrace(array $traces)
     {
-        foreach ($traces as $trace) {
-            $stacktrace = new Stacktrace($trace);
-            $this->stacktrace[] = $stacktrace;
-        }
+        $stacktrace = new Stacktrace($traces);
+        $this->stacktrace[] = $stacktrace;
     }
 
     /**
@@ -162,10 +160,12 @@ class Span extends AbstractModel
     public function stop(): void
     {
         parent::stop();
-        $traces = $this->getStackTraces();
-        foreach ($traces as $trace) {
-            $stacktrace = new Stacktrace($trace);
-            $this->stacktrace[] = $stacktrace;
+        if (empty($this->stacktrace)) {
+            $traces = $this->getStackTraces();
+            foreach ($traces as $trace) {
+                $stacktrace = new Stacktrace($trace);
+                $this->stacktrace[] = $stacktrace;
+            }
         }
     }
 
@@ -183,7 +183,7 @@ class Span extends AbstractModel
             'parent_id' => $this->parent_id,
             'start' => $this->start,
             'action' => $this->action,
-            'context' => $this->context,
+            'context' => $this->contexts,
             'duration' => $this->duration,
             'name' => $this->name,
             'stacktrace' => $this->stacktrace,
