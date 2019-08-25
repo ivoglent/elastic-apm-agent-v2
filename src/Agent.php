@@ -47,6 +47,7 @@ class Agent implements AgentInterface
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
+        $this->init();
     }
 
     private function init() {
@@ -114,6 +115,7 @@ class Agent implements AgentInterface
         //Set transaction / trace
         $span->start();
         $span->setStart($this->dataCollector->getTransaction()->getElapsedTime());
+        $span->setTraceId($this->dataCollector->getTransaction()->getTraceId());
         $this->traces[$span->getId()] = $span;
         $this->currentParent = $span;
 
@@ -195,9 +197,10 @@ class Agent implements AgentInterface
             'type' => get_class($throwable),
         ]);
         $exception->setStacktrace($throwable->getTrace());
+        $transaction = $this->dataCollector->getTransaction();
         $error = new Error([
             'parent_id' => null === $this->currentParent ? $this->dataCollector->getTransaction()->getId() : $this->currentParent->getId(),
-            'transaction' => $this->dataCollector->getTransaction(),
+            'transaction' => $transaction,
             'exception' => $exception,
         ]);
 

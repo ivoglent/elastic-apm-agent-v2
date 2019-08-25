@@ -6,6 +6,7 @@ use Elastic\Apm\PhpAgent\Exception\DataInvalidException;
 use Elastic\Apm\PhpAgent\Exception\InvalidConfigException;
 use Elastic\Apm\PhpAgent\Exception\RuntimeException;
 use Elastic\Apm\PhpAgent\Interfaces\ModelInterface;
+use Ramsey\Uuid\Uuid;
 
 abstract class BaseObject implements ModelInterface
 {
@@ -311,12 +312,11 @@ abstract class BaseObject implements ModelInterface
     }
 
     /**
-     * @param int|null $length
      * @return bool|string
      */
-    public function generateId(?int $length = 16): string
+    public function generateId(): string
     {
-        return substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
+        return Uuid::uuid4();
     }
 
     /**

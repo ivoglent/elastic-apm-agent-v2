@@ -32,7 +32,7 @@ class Error extends AbstractModel implements ModelInterface
      */
     public function setTransaction(Transaction $transaction)
     {
-        $transaction->setSampled(true);
+        //$transaction->setSampled(false);
         $this->transaction = $transaction;
         $this->transaction_id = $transaction->id;
         $this->trace_id = $transaction->trace_id;

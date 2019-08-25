@@ -54,7 +54,7 @@ abstract class AbstractModel extends BaseObject implements ModelInterface, Timed
     {
         parent::__construct($config);
         $this->timer = new Timer(false);
-        $this->id = $this->generateId(16);
+        $this->id = $this->generateId();
     }
 
     /**
