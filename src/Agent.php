@@ -140,8 +140,9 @@ class Agent implements AgentInterface
             $span = $this->traces[$id];
             unset($this->traces[$id]);
         }
-
-        $span->setContext($context->getSpanType(), $context);
+        if (null !== $context) {
+            $span->setContext($context->getSpanType(), $context);
+        }
         $span->stop();
         $this->currentParent = null;
         $this->register($span);
