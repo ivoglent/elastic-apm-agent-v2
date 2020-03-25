@@ -35,14 +35,6 @@ class Request extends BaseObject
     }
 
     /**
-     * @param string $method
-     */
-    public function setMethod(string $method): void
-    {
-        $this->method = $method;
-    }
-
-    /**
      * @return string
      */
     public function getUrl(): string
@@ -57,6 +49,15 @@ class Request extends BaseObject
     {
         return $this->method;
     }
+
+    /**
+     * @param string $method
+     */
+    public function setMethod(string $method): void
+    {
+        $this->method = $method;
+    }
+
 
 
     /**
