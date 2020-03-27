@@ -214,14 +214,14 @@ class Agent implements AgentInterface
      * @throws GuzzleException
      * @return bool
      */
-    public function send(?RequestInterface $request = null): bool
+    public function send(?RequestInterface $request = null, array $options = []): bool
     {
         $client = $this->config->getClient();
         if (null === $request) {
             $request = $this->makeRequest();
         }
         /** @var ResponseInterface $response */
-        $response = $client->send($request);
+        $response = $client->send($request, $options);
         $this->init();
         return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }

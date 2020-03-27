@@ -86,5 +86,5 @@ interface AgentInterface
      *
      * @return bool
      */
-    public function send(?RequestInterface $request = null): bool;
+    public function send(?RequestInterface $request = null, array $options = []): bool;
 }
